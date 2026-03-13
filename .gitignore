@@ -1,0 +1,10 @@
+# Environments
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Cấu hình môi trường (Không bao giờ đẩy thông tin mật lên Git)
+.env
