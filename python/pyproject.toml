@@ -1,0 +1,17 @@
+[project]
+name = "python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "nmnguyen130", email = "nguyenminhnguyen1324@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.135.1",
+    "uvicorn>=0.41.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
