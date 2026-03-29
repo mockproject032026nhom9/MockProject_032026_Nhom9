@@ -1,0 +1,42 @@
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Environment & Versioning
+.venv/
+.python-version
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific outputs
+outputs/
+
+# Data
+data/
+!data/README.md
+
+# Media
+*.png
+*.jpg
+*.jpeg
+!docs/**/*.png
+!docs/**/*.jpg
+
+# System & Temp
+Thumbs.db
+.DS_Store
+tmp/
+temp/
