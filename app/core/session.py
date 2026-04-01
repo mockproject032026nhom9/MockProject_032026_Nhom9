@@ -1,4 +1,4 @@
 from sqlalchemy.orm import sessionmaker
-from app.db.database import engine
+from app.core.database import engine
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

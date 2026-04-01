@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from app.core.database import Base
 
 class NotaryAct(Base):
     __tablename__ = "notary_acts"
@@ -12,7 +12,7 @@ class NotaryAct(Base):
     type = Column(String(50), nullable=False)
     status = Column(String(50), default="PENDING") 
 
-    # Mối quan hệ với bảng signature
+    # Mối quan hệ 
     signatures = relationship("Signature", back_populates="act")
 
 class Signature(Base):
@@ -25,5 +25,21 @@ class Signature(Base):
     signature_data = Column(Text, nullable=True) # Lưu Base64
     status = Column(String(50), default="PENDING")
 
-    # Mối quan hệ ngược lại
+    # Mối quan hệ 
     act = relationship("NotaryAct", back_populates="signatures")
+
+
+class JournalEntry(Base):
+    __tablename__ = "journal_entries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    act_id = Column(Integer, ForeignKey("notary_acts.id"), nullable=False, unique=True)
+    # Lưu các checklist của màn Execution
+    personal_appearance_verified = Column(Boolean, default=False)
+    oath_administered = Column(Boolean, default=False)
+    notes = Column(Text, nullable=True)
+    # F_06: Lưu thời gian bấm nút "Lock"
+    locked_at = Column(DateTime, nullable=True) 
+
+    # Mối quan hệ
+    act = relationship("NotaryAct", backref="journal")
