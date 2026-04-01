@@ -5,11 +5,11 @@ class Settings(BaseSettings):
     Global application configurations.
     Values can be overridden by environment variables or an .env file.
     """
-    PROJECT_NAME: str = "Modern FastAPI REST API"
+    PROJECT_NAME: str = "FastAPI REST API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
-    SECRET_KEY: str = "DEV_SECRET_KEY_CHANGE_IN_PROD"
+    SECRET_KEY: str = "DEV_SECRET_KEY"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
