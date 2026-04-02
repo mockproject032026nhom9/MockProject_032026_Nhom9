@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from core.database import Base, engine
-from api.routers import auth_router, user_router, job_router, notary_router, signature_router
+from api.routers import notarial_act_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -15,8 +15,4 @@ app = FastAPI(
 def root():
     return {"message": "Welcome to Notarization Management API - Team Python is ready!"}
 
-app.include_router(auth_router.router, prefix="/api/auth", tags=["0. Authentication"])
-app.include_router(user_router.router)
-app.include_router(job_router.router)
-app.include_router(notary_router.router)
-app.include_router(signature_router.router)
+app.include_router(notarial_act_router.router)

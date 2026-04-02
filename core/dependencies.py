@@ -4,7 +4,6 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.security import SECRET_KEY, ALGORITHM
-from api.models.user_model import User
 
 # Use HTTPBearer instead of OAuth2PasswordBearer
 security = HTTPBearer()
