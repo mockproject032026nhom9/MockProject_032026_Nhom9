@@ -1,0 +1,185 @@
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to view a centralized list of all recorded acts so that I can manage and oversee activities across all jurisdictions.
+AC: - AC1: The system must display KPI/Summary cards: Total Customers (B2B/B2C), Revenue, Job by Customers and Top Clients. - AC2: Cards must provide a breakdown of B2C vs. B2B counts upon hovering or direct display. - AC3: Data must be updated in real-time or after refreshing page to fetch the latest metrics.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to filter acts by Search ID/Client, Act Type, Status, and Date Range so that I can quickly find specific records.
+AC: - AC1: Search bar must support Job ID, Notary name, or Client name. - AC2: "Clear All Filters" button must reset all selected criteria to default. - AC3: Selected filter chips (e.g., State, Risk) must be removable individually.
+
+--- Req  () ---
+Screen: 
+Desc: As a notary public, I want to see real-time compliance alerts so I can correct procedural errors before records are permanently locked.
+AC: - AC1: "Registry Health" card must display the percentage of successful acts. - AC2: "Compliance Flags" card must highlight the number of urgent tasks in red. - AC3: Data in cards must update dynamically based on the current filtered list.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to see the overview of the act (Type, Date, Jurisdiction) so that I can verify the context before proceeding.
+AC: - AC1: Display Act ID, Status (e.g., In Progress), Act Type, and Assigned Notary. - AC2: The "Linked Job" ID must be a clickable link leading back to the original Job record.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want a checklist of compliance steps (KBA, Oath, Journal) so that I don't miss any legal requirements.
+AC: - AC1: Steps must show real-time status: Passed (Green), Required (Yellow/Blue), or Pending (Grey). - AC2: Clicking "Complete Now" on "Oath" must redirect the user to the Execution screen
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to lock the record once all steps are completed so that the document is digitally sealed and tamper-evident.
+AC: - AC1: "Lock Record" button must remain DISABLED until all items in the Compliance Snapshot are "Passed/Completed". - AC2: Locking the record must trigger the Digital Signature (X.509) encryption on the final PDF.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to use the "Continue Act" button so that I can immediately jump to the next required step in the execution process.
+AC: - AC1: Clicking "Continue Act" must redirect the user to the latest incomplete step - AC2: System must maintain the current session state and previously entered data.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to view a draft of the generated certificate so that I can verify all legal wording and seal placements before finalizing.
+AC: - AC1: The system must generate a PDF preview with dynamic data (Names, Dates, Act Type) filled in. - AC2: A "DRAFT" watermark must be visible on the preview to prevent unauthorized use before locking.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to expand the document to full-screen so that I can read the fine print and verify all pages of the uploaded document.
+AC: - AC1: Clicking "Expand Document" must open a high-resolution Modal viewer. - AC2: The viewer must support Zoom-in/Zoom-out and multi-page scrolling capabilities.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to select the specific act type (Acknowledgment, Jurat, etc.) so that the system can apply the correct legal template and required actions.
+AC: - AC1: Selection must be mutually exclusive (Radio buttons). - AC2: Selecting "Jurat" must automatically check and lock the "Oath/affirmation administration" required action.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to select the jurisdiction (State) so that the system displays dynamic legal requirements and statutory wording
+AC: - AC1: Dropdown must list all US states. - AC2: Upon state selection (e.g., California), a dynamic info box must appear showing relevant Civil Code sections and specific rules.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to enter document details and the number of signers so that the system can prepare the correct number of signature fields and journal entries.
+AC: - AC1: "Number of Signers" must be a positive integer (>0). - AC2: Document title and page count must be captured for the Electronic Journal.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to enable or disable specific actions (like Thumbprint) based on the document type and state law.
+AC: - AC1: "Thumbprint required" must be automatically enabled for California Real Estate documents. - AC2: Notary must be able to manually toggle optional actions if allowed by state law.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to move to the next stage or return to the overview so that I can manage the setup process smoothly.
+AC: - AC1: "Next" button must be disabled until all mandatory fields (Act Type, State, Document Title) are filled. - AC2: "Back" button must return the user to the Act Overview screen.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to add or select multiple signers so that I can verify each individual involved in the act.
+AC: - AC1: "Add signer" button must allow adding new entries to the list. - AC2: Selected signers must show their role (e.g., GRANTOR) and verification status (e.g., Verified).
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to record ID information (Type, Number, Authority, Expiry) so that I can create a legally binding record of the signer's identity.
+AC: - AC1: ID Type dropdown must include options like Driver's License, Passport, etc. - AC2: Expiration Date must be validated to ensure the ID is currently valid.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to choose between "Physical Presence" and "RON" so that the system applies the correct verification protocol.
+AC: - AC1: Selecting "Remote Online" must trigger the KBA + ID Scan workflow for the signer. - AC2: "Physical Presence" must require the Notary to manually verify the ID.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to upload or drag-and-drop photos of the signer's ID so that I have a digital backup of the evidence.
+AC: - AC1: Supports Drag & Drop and Browse Files (JPEG, PNG, PDF). - AC2: System must show a success/error message upon upload
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to see a final compliance validation status so that I can be sure the identity verification meets legal standards.
+AC: - AC1: "Compliance Validation" must show "Status: Valid" only if all mandatory fields and attachments are present. - AC2: "Next" button is disabled until the status is "Valid".
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to confirm the signer's appearance and administer the oath so that I can comply with state legal protocols.
+AC: - AC1: Notary must toggle "Verified" for personal appearance. - AC2: Notary must select "Yes/No" for Oath administration (mandatory for Jurat types).
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to capture signatures via upload (Wet) or digital drawing (Electronic) so that the system accommodates both physical and online methods.
+AC: - AC1: Supports image upload (PNG/JPG < 10MB) for wet signatures. - AC2: Provides a digital canvas for real-time electronic signatures. - AC3: Displays "Verified Identity" badge only if KBA/ID scan was successful.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to lock the specific execution time so that the document reflects the exact moment the legal act occurred.
+AC: - AC1: System must default to current server time. - AC2: Clicking "Lock" prevents any further changes to the timestamp.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to input notes and observations so that I can document any irregularities or specific capacities of the signer.
+AC: - AC1: Text area for manual notes with auto-save capability. - AC2: Display "Journal Compliant" status indicator once mandatory fields are filled.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to complete and finalize the act so that all data is saved and moved to the Certification stage.
+AC: - AC1: "Complete & Finalize Act" button must trigger a final validation check. - AC2: "Save for Later" must preserve all current progress for future resumption.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want the system to automatically select the correct certificate template based on the Act Type and State so that I can ensure compliance without manual searching.
+AC: - AC1: System must auto-populate the template based on selections from Screen 3. - AC2: Notary must be able to override the template if legally required.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to edit the Venue (County/State) and Date so that the certificate accurately reflects the jurisdiction where the act was performed.
+AC: - AC1: Text fields for Venue and Date must be editable. - AC2: System should default Venue to the Notary's registered jurisdiction.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to choose between a physical seal reference or an electronic seal (eSeal) so that I can finish the notarization based on the chosen method (RON or In-person).
+AC: - AC1: Selecting "Electronic Seal" must trigger the digital signature (X.509) encryption. - AC2: The system must show a "Seal Placement Area Placeholder" for visual alignment.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to perform a final review and "Finalize & Lock" the record so that the document is permanently sealed and made immutable.
+AC: - AC1: "Finalize and Lock" must trigger a warning: "Once locked, the record is immutable". - AC2: The system must generate the final PDF with all signatures and the seal merged.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want the system to auto-fill act details and signer info so that I can save time and reduce manual entry errors.
+AC: - AC1: Date/Time, Act Type, and Signer IDs must be pulled automatically from previous steps. - AC2: System must display "PENDING" for any missing data (e.g., Witness ID).
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to manually enter the fee charged, location, and additional notes so that the journal meets all state record-keeping requirements.
+AC: - AC1: "Fee Charged" must be a numeric field ($). - AC2: "Location of Act" must allow manual entry for mobile/in-person scenarios.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to capture the signer's thumbprint (if required) so that I can comply with state-specific anti-fraud laws (e.g., California).
+AC: - AC1: "Capture Print" button must trigger the biometric device or mobile camera interface. - AC2: Thumbprint image must be stored securely and linked to this specific journal entry.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to see a compliance check status so that I can be sure all mandatory journal fields are captured before saving.
+AC: - AC1: Display "Compliance Status: All requirements met" only when all mandatory fields are filled. - AC2: "Save Journal Entry" button is disabled if compliance checks fail.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary/Admin, I want to see a visual timeline of the act's status so that I can verify when it was drafted, completed, and locked.
+AC: - AC1: Display a horizontal timeline with Status names (Draft, Completed, Locked) and exact Timestamps. - AC2: Icons must change state (e.g., Checkmark vs Lock) based on the current progress.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to void an act with a specific reason and notes so that I can legally invalidate a record while maintaining the audit trail.
+AC: - AC1: "Void Reason" dropdown must be mandatory before clicking Void. - AC2: The system must require an "Approval" checkbox if the company policy demands it. - AC3: Voided acts must still remain in the database but be marked as "Invalid".
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to export the notarized documents in various formats (Secure PDF, Certified Copy, JSON) so that I can meet different client or regulatory requirements.
+AC: - AC1: "Secure PDF" must include watermarks and encryption. - AC2: "Certified Copy" must include the Notary's digital signature (X.509). - AC3: "Raw JSON/CSV" must be formatted for easy integration with audit software.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary/Admin, I want to toggle access for Clients or Regulators so that I can control who has permission to view or download the records.
+AC: - AC1: Toggling "Regulator Access" must trigger an automatic notification (e.g., FINRA-compliant alert). - AC2: Access permissions must be reflected in real-time for the respective user accounts.
+
+--- Req  () ---
+Screen: 
+Desc: As a Notary, I want to generate a secure, time-limited link so that the client can download their documents without logging into the main system.
+AC: - AC1: Clicking "Generate Secure Link" must create a unique URL with an expiration policy. - AC2: The link must require a second factor of authentication (e.g., OTP) to access the files.
+
