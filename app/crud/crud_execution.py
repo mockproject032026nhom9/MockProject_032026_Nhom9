@@ -30,9 +30,9 @@ def lock_execution_time(db: Session, act_id: str):
 def update_execution_status(db: Session, act_id: str, payload: ExecutionUpdate):
     act = db.query(NotaryAct).filter(NotaryAct.id == int(act_id)).first()
     if not act:
-        return None, "Không tìm thấy hồ sơ"
+        return None, "Record not found"
 
-    # 1. Cập nhật Journal
+    # Cập nhật Journal
     journal = db.query(JournalEntry).filter(JournalEntry.act_id == int(act_id)).first()
     if not journal:
         journal = JournalEntry(act_id=int(act_id))
@@ -42,7 +42,7 @@ def update_execution_status(db: Session, act_id: str, payload: ExecutionUpdate):
     journal.oath_administered = payload.oath_administered
     journal.notes = payload.notes
 
-    # 2. Xử lý Logic Đổi trạng thái
+    # Xử lý logic đổi trạng thái
     if payload.action == "COMPLETE":
         # Bấm Complete mà chưa Lock Time thì báo lỗi
         if not journal.locked_at:

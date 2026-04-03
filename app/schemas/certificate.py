@@ -1,10 +1,13 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
+
 
 class CertificateUpdate(BaseModel):
-    venue: str
-    date: str
-    seal_type: str
+    venue: Optional[str] = None
+    certificate_date: Optional[datetime] = None
+    seal_type: Optional[str] = None
+
 
 class CertificateDetailResponse(BaseModel):
     act_id: str

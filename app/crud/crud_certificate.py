@@ -1,21 +1,37 @@
-from sqlalchemy.orm import Session
-from app.models.act_model import NotaryAct
+from sqlalchemy.orm import Session, joinedload
+from app.models.act_model import NotaryAct, Certificate
 from app.schemas.certificate import CertificateUpdate
 
-
 def get_certificate_detail(db: Session, act_id: str):
-    # Lấy thông tin hiển thị lên màn hình Certificate
-    return db.query(NotaryAct).filter(NotaryAct.act_id == act_id).first()
-
-
-def update_certificate(db: Session, act_id: str, payload: CertificateUpdate):
-    # Lưu lại các thay đổi khi người dùng chọn con dấu, sửa venue...
-    act = db.query(NotaryAct).filter(NotaryAct.act_id == act_id).first()
+    act = (
+        db.query(NotaryAct)
+        .options(
+            joinedload(NotaryAct.certificate),
+            joinedload(NotaryAct.signatures)
+        )
+        .filter(NotaryAct.id == int(act_id))
+        .first()
+    )
     if not act:
         return None
-    # Gán dữ liệu từ Pydantic schema vào SQLAlchemy Model
-    act.venue = payload.venue
-    act.seal_type = payload.seal_type
+    signer_names = ", ".join([f"User_{sig.user_id}" for sig in act.signatures]) if act.signatures else "No signers yet"
+    return act, act.certificate, signer_names
+
+def update_certificate(db: Session, act_id: str, payload: CertificateUpdate):
+    act = db.query(NotaryAct).filter(NotaryAct.id == int(act_id)).first()
+    if not act:
+        return None
+    cert = db.query(Certificate).filter(Certificate.act_id == int(act_id)).first()
+    if not cert:
+        cert = Certificate(act_id=int(act_id))
+        db.add(cert)
+
+    cert.venue = payload.venue
+    cert.certificate_date = payload.certificate_date
+    cert.seal_type = payload.seal_type
+
+    # Nút "Finalize and Lock Record" Chốt sổ Act!
+    act.status = "LOCKED" 
     db.commit()
-    db.refresh(act)
-    return act
+    db.refresh(cert)
+    return cert

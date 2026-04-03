@@ -11,7 +11,7 @@ router = APIRouter()
 def get_execution(act_id: str, db: Session = Depends(get_db)):
     result = crud_execution.get_execution_detail(db=db, act_id=act_id)
     if not result:
-        raise HTTPException(status_code=404, detail="Không tìm thấy hồ sơ")
+        raise HTTPException(status_code=404, detail="Record not found")
 
     act, signatures, journal = result
 
@@ -38,13 +38,13 @@ def get_execution(act_id: str, db: Session = Depends(get_db)):
     }
 
 
-@router.post("/{act_id}/lock-time", summary="Khóa thời gian thực thi")
+@router.post("/{act_id}/lock-time", summary="Execution time lock")
 def lock_time(act_id: str, db: Session = Depends(get_db)):
     crud_execution.lock_execution_time(db, act_id)
     return {"status_code": 200, "success": True, "message": "Time locked successfully"}
 
 
-@router.patch("/{act_id}/excution", summary="Cập nhật & Chốt hồ sơ (F_07, F_08)")
+@router.patch("/{act_id}/excution", summary="Update & Finalize Record")
 def update_execution(
     act_id: str, payload: ExecutionUpdate, db: Session = Depends(get_db)
 ):
@@ -76,12 +76,13 @@ def upload_electronic_signature(
     return {
         "status_code": 200,
         "success": True,
-        "message": "Đã lưu chữ ký điện tử thành công!",
+        "message": "Electronic signature saved successfully",
+        "data": {"signature_id": sig_record.id, "status": sig_record.status},
     }
 
 
 @router.post(
-    "/{act_id}/signers/{signer_id}/wet-signature", summary="Upload file chữ ký"
+    "/{act_id}/signers/{signer_id}/wet-signature", summary="Upload file signature"
 )
 def upload_wet_signature(
     act_id: str,
