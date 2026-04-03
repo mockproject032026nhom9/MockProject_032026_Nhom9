@@ -21,6 +21,15 @@ class JournalEntry(Base):
     
     # Logic Metadata
     act_type: Mapped[str] = mapped_column(String(50), nullable=False) # e.g., ACKNOWLEDGMENT
+    
+    # Act Setup Configuration Details (Tester Spec)
+    state: Mapped[str | None] = mapped_column(String(100))
+    document_title: Mapped[str | None] = mapped_column(String(200))
+    number_of_documents: Mapped[int | None] = mapped_column(Integer)
+    number_of_signers_expected: Mapped[int | None] = mapped_column(Integer)
+    oath_administered_required: Mapped[bool] = mapped_column(Boolean, default=False)
+    thumbprint_required: Mapped[bool] = mapped_column(Boolean, default=False)
+
     date_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     location: Mapped[str | None] = mapped_column(String(255))
     notary_notes: Mapped[str | None] = mapped_column(String(500))
@@ -67,8 +76,15 @@ class JournalSigner(Base):
     journal_id: Mapped[int] = mapped_column(Integer, ForeignKey("journal_entries.id"), nullable=False)
     full_name: Mapped[str] = mapped_column(String(100), nullable=False)
     role: Mapped[str] = mapped_column(String(50), nullable=False) # Grantor, Witness, etc.
-    id_number: Mapped[str | None] = mapped_column(String(50))
-    status: Mapped[str] = mapped_column(String(20), default="Verified")
+    
+    # ID Verification Fields according to Tester Spec
+    id_type: Mapped[str | None] = mapped_column(String(100)) # e.g. State Driver's License
+    id_number: Mapped[str | None] = mapped_column(String(100))
+    id_authority: Mapped[str | None] = mapped_column(String(150))
+    id_expiry_date: Mapped[datetime | None] = mapped_column(DateTime)
+    verification_method: Mapped[str | None] = mapped_column(String(100)) # Physical Presence, RON, etc.
+    
+    status: Mapped[str] = mapped_column(String(50), default="Not Verified")
 
     journal_entry: Mapped["JournalEntry"] = relationship("JournalEntry", back_populates="signers")
     biometric: Mapped["JournalBiometric"] = relationship(

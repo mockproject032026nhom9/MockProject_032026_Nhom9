@@ -28,13 +28,22 @@ async def app_exception_handler(request: Request, exc: AppException):
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Handler for Pydantic validation errors (422 Unprocessable Entity)."""
+    errors = exc.errors()
+    msg = "Validation Error"
+    if errors and len(errors) > 0:
+        # Extract the specific custom error message if available (e.g., from raise ValueError)
+        msg = errors[0].get("msg", msg)
+        # Pydantic prepends 'Value error, ' for custom validators, strip it out cleanly
+        if msg.startswith("Value error, "):
+            msg = msg.replace("Value error, ", "", 1)
+            
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "statusCode": 422,
             "success": False,
-            "message": "Validation Error",
-            "data": exc.errors()
+            "message": msg,
+            "data": None
         }
     )
 

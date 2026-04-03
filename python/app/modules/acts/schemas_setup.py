@@ -1,47 +1,7 @@
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
 import re
+from datetime import datetime
+from pydantic import BaseModel, Field, model_validator, field_validator
 from typing import Optional
-
-class StatusTimelineItem(BaseModel):
-    """Represents a single point in the Act's history."""
-    status: str
-    timestamp: datetime
-    is_active: bool
-
-    model_config = ConfigDict(from_attributes=True)
-
-class ActStatusOut(BaseModel):
-    """Aggregate response for act status overview."""
-    act_id: str = Field(..., description="The unique identifier for the act (e.g., ACT001)")
-    timeline: list[StatusTimelineItem]
-    is_legal_hold: bool
-
-    model_config = ConfigDict(from_attributes=True)
-
-class VoidActRequest(BaseModel):
-    """Schema for voiding an act (Cancellation)."""
-    reason_code: str
-    additional_notes: str | None = None
-    approval_required: bool = False
-
-class LegalHoldRequest(BaseModel):
-    """Schema for updating the legal hold status."""
-    is_legal_hold: bool
-
-class AuditLogItem(BaseModel):
-    """Represents a single historical action logged in the audit trail."""
-    timestamp: datetime
-    user: str = Field(..., alias="user_name", serialization_alias="user")
-    action: str
-    details: str
-
-    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
-
-class AuditLogsResponse(BaseModel):
-    """Paginated list of audit logs."""
-    items: list[AuditLogItem]
-    total: int
 
 class SetupActRequest(BaseModel):
     act_type: str
@@ -129,6 +89,7 @@ class AddSignerRequest(BaseModel):
     def validate_expiry(cls, v):
         if v:
             try:
+                # expecting format mm/dd/yyyy or yyyy-mm-dd
                 if '/' in v:
                     dt = datetime.strptime(v, '%m/%d/%Y')
                 else:
@@ -142,10 +103,11 @@ class AddSignerRequest(BaseModel):
 
     @model_validator(mode='after')
     def validate_id_verification(self):
+        # Verification fails if ID elements are missing during verification
+        # The form passes down these fields based on selection
         if self.id_type:
             if not self.id_number:
                 raise ValueError("ID Number cannot be left blank")
             if not self.id_authority:
                 raise ValueError("Issuing Authority cannot be left blank")
         return self
-

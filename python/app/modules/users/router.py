@@ -28,22 +28,20 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
         data=user
     )
 
-@router.post("/login", response_model=ApiResponse[Token])
-async def login(login_data: LoginSchema, db: AsyncSession = Depends(get_db)):
+from fastapi.security import OAuth2PasswordRequestForm
+
+@router.post("/login", response_model=Token)
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
     """Authenticate and return a JWT access token."""
-    user = await user_service.authenticate(db, login_data.email, login_data.password)
+    user = await user_service.authenticate(db, form_data.username, form_data.password)
     if not user:
-        return ApiResponse(
-            statusCode=401,
-            success=False,
-            message="Invalid email or password"
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password",
+            headers={"WWW-Authenticate": "Bearer"},
         )
     
-    token = user_service.create_token(user)
-    return ApiResponse(
-        message="Login successful",
-        data=token
-    )
+    return user_service.create_token(user)
 
 @router.get("/me", response_model=ApiResponse[UserOut])
 async def get_me(current_user: User = Depends(get_current_user)):

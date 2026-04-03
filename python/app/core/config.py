@@ -13,10 +13,15 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
+    # DATABASE_URL: str = "sqlite+aiosqlite:///./test.db"
+
     DATABASE_URL: str = (
-        "mssql+aioodbc://sa:123456@127.0.0.1/mockdb?"
-        "driver=ODBC+Driver+18+for+SQL+Server&"
-        "TrustServerCertificate=yes&Encrypt=no"
+        # "mssql+aioodbc://sa:123@127.0.0.1/mockdb?"
+        # "driver=ODBC+Driver+18+for+SQL+Server&"
+        # "TrustServerCertificate=yes&Encrypt=no"
+        "mssql+aioodbc://sa:123@localhost/mockdb?"
+        "driver=ODBC+Driver+17+for+SQL+Server&"
+        "TrustServerCertificate=yes"
     )
 
     model_config = SettingsConfigDict(
