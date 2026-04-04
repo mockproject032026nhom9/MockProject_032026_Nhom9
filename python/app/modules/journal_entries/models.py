@@ -1,40 +1,45 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, DateTime, Boolean, DECIMAL, ForeignKey, func
 from datetime import datetime
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from app.core.database import Base
 
+if TYPE_CHECKING:
+    from app.modules.acts.models import NotaryAct
+
 class JournalEntry(Base):
     """
-    Parent record for a Notary Journal entry. 
+    Specific Journal Entry record. 
+    N : 1 Relationship with NotaryAct.
     1 : N Relationship with Signers.
     1 : 1 Relationship with Fees and Compliance.
     """
     __tablename__ = "journal_entries"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    notary_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    act_id: Mapped[int] = mapped_column(Integer, ForeignKey("notary_acts.id"), nullable=False)
+    
+    # Financial aggregate
     notarial_fee: Mapped[float] = mapped_column(DECIMAL(10, 2), default=0.0)
-    status: Mapped[str] = mapped_column(String(20), default="COMPLETED") # DRAFT, COMPLETED, CANCELLED
-    is_legal_hold: Mapped[bool] = mapped_column(Boolean, default=False)
     
-    # Logic Metadata
+    # Logic Metadata (Document Info)
     act_type: Mapped[str] = mapped_column(String(50), nullable=False) # e.g., ACKNOWLEDGMENT
-    
-    # Act Setup Configuration Details (Tester Spec)
     state: Mapped[str | None] = mapped_column(String(100))
     document_title: Mapped[str | None] = mapped_column(String(200))
     number_of_documents: Mapped[int | None] = mapped_column(Integer)
-    number_of_signers_expected: Mapped[int | None] = mapped_column(Integer)
-    oath_administered_required: Mapped[bool] = mapped_column(Boolean, default=False)
-    thumbprint_required: Mapped[bool] = mapped_column(Boolean, default=False)
-
-    date_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     location: Mapped[str | None] = mapped_column(String(255))
     notary_notes: Mapped[str | None] = mapped_column(String(500))
 
-    # Relationships (Using selectin loading for high-performance aggregate retrieval)
+    # Relationships
+    notary_act: Mapped["NotaryAct"] = relationship(
+        "NotaryAct", 
+        back_populates="journal_records",
+        lazy="selectin"
+    )
+    
     signers: Mapped[List["JournalSigner"]] = relationship(
         "JournalSigner", 
         back_populates="journal_entry", 
@@ -53,18 +58,6 @@ class JournalEntry(Base):
         back_populates="journal_entry", 
         uselist=False, 
         cascade="all, delete-orphan", 
-        lazy="selectin"
-    )
-    status_history: Mapped[List["JournalStatusHistory"]] = relationship(
-        "JournalStatusHistory",
-        back_populates="journal_entry",
-        cascade="all, delete-orphan",
-        lazy="selectin"
-    )
-    audit_logs: Mapped[List["ActAuditLog"]] = relationship(
-        "ActAuditLog",
-        back_populates="journal_entry",
-        cascade="all, delete-orphan",
         lazy="selectin"
     )
 
@@ -148,29 +141,3 @@ class JournalCompliance(Base):
     final_notary_seal: Mapped[bool] = mapped_column(Boolean, default=False)
 
     journal_entry: Mapped["JournalEntry"] = relationship("JournalEntry", back_populates="compliance")
-
-class JournalStatusHistory(Base):
-    """Traceable history of status changes for a Journal Entry."""
-    __tablename__ = "journal_status_history"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    journal_id: Mapped[int] = mapped_column(Integer, ForeignKey("journal_entries.id"), nullable=False)
-    status: Mapped[str] = mapped_column(String(20), nullable=False)
-    timestamp: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-
-    journal_entry: Mapped["JournalEntry"] = relationship("JournalEntry", back_populates="status_history")
-
-class ActAuditLog(Base):
-    """Permanent audit trail for actions performed on a Notary Act."""
-    __tablename__ = "act_audit_logs"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    journal_id: Mapped[int] = mapped_column(Integer, ForeignKey("journal_entries.id"), nullable=False)
-    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"))
-    user_name: Mapped[str] = mapped_column(String(100), nullable=False) # Denormalized for historical accuracy
-    action: Mapped[str] = mapped_column(String(50), nullable=False) # e.g., VOIDED, CREATED
-    details: Mapped[str] = mapped_column(String(500), nullable=False)
-    timestamp: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-
-    journal_entry: Mapped["JournalEntry"] = relationship("JournalEntry", back_populates="audit_logs")

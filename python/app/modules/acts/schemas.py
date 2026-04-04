@@ -1,7 +1,41 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
-import re
-from typing import Optional
+from enum import Enum
+from pydantic import BaseModel, ConfigDict, Field
+from typing import List, Optional
+
+class ActTypeEnum(str, Enum):
+    REAL_ESTATE = "Real Estate Closing"
+    WILLS_TRUSTS = "Wills & Trusts"
+    POWER_OF_ATTORNEY = "Power of Attorney"
+    AFFIDAVITS = "Affidavits"
+
+class StatusEnum(str, Enum):
+    COMPLETED = "Completed"
+    INPROCESS = "Inprocess"
+    VOIDED = "Voided"
+
+class DateRangeEnum(str, Enum):
+    TODAY = "Today"
+    LAST_7_DAYS = "Last 7 Days"
+    LAST_30_DAYS = "Last 30 Days"
+    LAST_90_DAYS = "Last 90 Days"
+
+class ActListItem(BaseModel):
+    """Represents a single act in the dashboard list view."""
+    id: int
+    act_type: str
+    notary_name: str
+    client_name: str
+    created_at: datetime
+    state: str
+    status: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ActListResponse(BaseModel):
+    """Paginated list of acts for the dashboard."""
+    items: List[ActListItem]
+    total: int
 
 class StatusTimelineItem(BaseModel):
     """Represents a single point in the Act's history."""
@@ -13,8 +47,9 @@ class StatusTimelineItem(BaseModel):
 
 class ActStatusOut(BaseModel):
     """Aggregate response for act status overview."""
-    act_id: str = Field(..., description="The unique identifier for the act (e.g., ACT001)")
-    timeline: list[StatusTimelineItem]
+    act_id: int
+    status: str
+    timeline: List[StatusTimelineItem]
     is_legal_hold: bool
 
     model_config = ConfigDict(from_attributes=True)
@@ -22,7 +57,7 @@ class ActStatusOut(BaseModel):
 class VoidActRequest(BaseModel):
     """Schema for voiding an act (Cancellation)."""
     reason_code: str
-    additional_notes: str | None = None
+    additional_notes: Optional[str] = None
     approval_required: bool = False
 
 class LegalHoldRequest(BaseModel):
@@ -40,112 +75,12 @@ class AuditLogItem(BaseModel):
 
 class AuditLogsResponse(BaseModel):
     """Paginated list of audit logs."""
-    items: list[AuditLogItem]
+    items: List[AuditLogItem]
     total: int
 
 class SetupActRequest(BaseModel):
+    """Initial configuration for a new Notarial Act session."""
     act_type: str
-    state: str = Field(..., description="Please select a state")
+    state: str
     document_title: str
     number_of_documents: int
-    number_of_signers: int
-    oath_administered: bool = False
-    thumbprint_required: bool = False
-
-    @field_validator('state', mode='before')
-    def validate_state(cls, v):
-        if not v or not str(v).strip():
-            raise ValueError("Please select a state")
-        return v
-
-    @field_validator('document_title', mode='before')
-    def validate_doc_title(cls, v):
-        if not v or not str(v).strip():
-            raise ValueError("Please enter document information")
-        title = str(v).strip()
-        if len(title) > 200:
-            raise ValueError("Document title exceeds the maximum allowed length")
-        if re.search(r'[@#$^*]', title):
-            raise ValueError("Invalid document title")
-        return title
-
-    @field_validator('number_of_documents', mode='before')
-    def validate_num_docs(cls, v):
-        if v is None or str(v).strip() == "":
-            raise ValueError("Please enter the number of documents")
-        try:
-            val = int(v)
-        except ValueError:
-            raise ValueError("Invalid number of documents")
-        
-        if val <= 0:
-            if val == 0:
-                raise ValueError("Number of documents must be greater than 0")
-            raise ValueError("Invalid number of documents")
-        if val > 999:
-            raise ValueError("Number of documents exceeds the allowed limit")
-        return val
-
-    @field_validator('number_of_signers', mode='before')
-    def validate_num_signers(cls, v):
-        if v is None or str(v).strip() == "":
-            raise ValueError("Please enter the number of signers")
-        try:
-            val = int(v)
-        except ValueError:
-            raise ValueError("Invalid number of signers")
-            
-        if val <= 0:
-            if val == 0:
-                raise ValueError("Number of signers must be greater than 0")
-            raise ValueError("Invalid number of signers")
-        if val > 99:
-            raise ValueError("Number of signers exceeds the allowed limit")
-        return val
-
-    @model_validator(mode='after')
-    def validate_required_actions(self):
-        if not self.oath_administered and not self.thumbprint_required:
-            raise ValueError("Please select required actions")
-        return self
-
-
-class AddSignerRequest(BaseModel):
-    full_name: str
-    role: str
-    id_type: Optional[str] = None
-    id_number: Optional[str] = None
-    id_authority: Optional[str] = None
-    id_expiry_date: Optional[str] = None
-    verification_method: Optional[str] = None
-
-    @field_validator('full_name', 'role', mode='before')
-    def validate_required(cls, v):
-        if not v or not str(v).strip():
-            raise ValueError("Singer creation failed due to missing required fields.")
-        return v
-        
-    @field_validator('id_expiry_date', mode='before')
-    def validate_expiry(cls, v):
-        if v:
-            try:
-                if '/' in v:
-                    dt = datetime.strptime(v, '%m/%d/%Y')
-                else:
-                    dt = datetime.strptime(v, '%Y-%m-%d')
-                if dt < datetime.now():
-                    raise ValueError("ID is expired. Please provide a valid ID.")
-            except ValueError as e:
-                if str(e).startswith("ID"):
-                    raise e
-        return v
-
-    @model_validator(mode='after')
-    def validate_id_verification(self):
-        if self.id_type:
-            if not self.id_number:
-                raise ValueError("ID Number cannot be left blank")
-            if not self.id_authority:
-                raise ValueError("Issuing Authority cannot be left blank")
-        return self
-

@@ -18,12 +18,6 @@ from app.core.exceptions import (
 )
 from app.core.logger import logger
 
-# Import all models to ensure SQLAlchemy registers them before create_all
-import app.modules.roles.models
-import app.modules.users.models
-import app.modules.journal_entries.models
-import app.modules.references.models
-
 from app.modules.roles.services import role_service
 
 @asynccontextmanager

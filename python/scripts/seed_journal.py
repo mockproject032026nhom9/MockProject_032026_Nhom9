@@ -1,6 +1,7 @@
 import asyncio
 import sys
 from pathlib import Path
+from datetime import datetime, timedelta
 
 # Add project root to path to allow absolute imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -8,74 +9,117 @@ sys.path.append(str(Path(__file__).parent.parent))
 from sqlalchemy import select
 from app.core.database import SessionLocal, engine, Base
 from app.core.logger import logger
+from app.modules.acts.models import (
+    NotaryAct,
+    ActStatusHistory,
+    ActAuditLog,
+)
+from app.modules.notaries.models import Notary
 from app.modules.journal_entries.models import (
     JournalBiometric,
     JournalCompliance,
     JournalEntry,
     JournalFee,
     JournalSigner,
-    JournalStatusHistory,
-    ActAuditLog,
 )
 from app.modules.roles.models import Role
 from app.modules.users.models import User
 from app.modules.references.models import VoidReason
 
 async def seed_journal_data():
-    """Seed a comprehensive Notary Journal entry for testing aggregate APIs."""
+    """Seed a comprehensive Notary Act and Journal Entry for testing."""
     async with SessionLocal() as db:
-        logger.info("Starting Journal seeding...")
+        logger.info("Starting database seeding...")
         
-        # 1. Ensure Roles and a Notary (User) exist
+        # 1. Standard Roles
         from app.modules.roles.services import role_service
         await role_service.seed_roles(db)
         
+        # 2. Default User & Notary Profile
         result = await db.execute(select(User).limit(1))
-        notary = result.scalars().first()
+        user = result.scalars().first()
         
-        if not notary:
-            logger.info("No users found. Creating a default Admin notary...")
-            # Fetch Admin role
+        if not user:
             role_result = await db.execute(select(Role).filter(Role.name == "Admin"))
             admin_role = role_result.scalars().first()
             
-            notary = User(
+            user = User(
                 email="admin@notary.com",
-                password_hash="hashed_password", # Dummy for seed
-                full_name="Default Notary Admin",
+                password_hash="$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6L65JG6C3V6Xm8f6", # 'password'
+                full_name="James Smith",
                 role_id=admin_role.id
             )
-            db.add(notary)
+            db.add(user)
             await db.flush()
 
-        # 2. Create the Master Journal Entry
-        journal = JournalEntry(
-            notary_id=notary.id,
-            notarial_fee=66.50,
+        # 3. Create professional Notary Profile
+        notary_result = await db.execute(select(Notary).filter(Notary.user_id == user.id))
+        notary_profile = notary_result.scalars().first()
+        
+        if not notary_profile:
+            notary_profile = Notary(
+                user_id=user.id,
+                ssn="123-45-6789",
+                full_name="James Smith",
+                email="j.smith@mail.com",
+                phone="(555) 123-4567",
+                employment_type="FULL_TIME",
+                start_date=datetime(2021, 6, 1).date(),
+                internal_notes="Top performer 2022",
+                status="ACTIVE",
+                residential_address="123 Maple St, Seattle, WA 98101",
+                photo_url="/img/jsmith.jpg"
+            )
+            db.add(notary_profile)
+            await db.flush()
+
+        # 4. Create the Master Notary Act (Session)
+        act = NotaryAct(
+            notary_id=notary_profile.id,
             status="COMPLETED",
+            is_legal_hold=False
+        )
+        db.add(act)
+        await db.flush()
+
+        # 5. Seed Act Lifecycle (History & Audit)
+        now = datetime.now()
+        history = [
+            ActStatusHistory(act_id=act.id, status="DRAFT", timestamp=now - timedelta(hours=2)),
+            ActStatusHistory(act_id=act.id, status="IN_PROGRESS", timestamp=now - timedelta(hours=1)),
+            ActStatusHistory(act_id=act.id, status="COMPLETED", timestamp=now),
+        ]
+        db.add_all(history)
+
+        audit = ActAuditLog(
+            act_id=act.id,
+            user_id=user.id,
+            user_name=user.full_name,
+            action="CREATED",
+            details="Notarial act session initialized from system template."
+        )
+        db.add(audit)
+
+        # 6. Create a Journal Entry record within this Act
+        journal = JournalEntry(
+            act_id=act.id,
+            notarial_fee=66.50,
             act_type="ACKNOWLEDGMENT",
-            is_legal_hold=False,
+            state="California",
+            document_title="Property Deed Transfer",
+            number_of_documents=1,
             location="123 Main St, Springfield",
             notary_notes="Standard acknowledgment for property transfer."
         )
         db.add(journal)
-        await db.flush() # Get the ID for foreign keys
+        await db.flush()
         
-        # 2a. Seed Status History (Timeline)
-        from datetime import datetime, timedelta
-        now = datetime.now()
-        history = [
-            JournalStatusHistory(journal_id=journal.id, status="Draft", timestamp=now - timedelta(hours=1), is_active=True),
-            JournalStatusHistory(journal_id=journal.id, status="Completed", timestamp=now, is_active=True),
-            JournalStatusHistory(journal_id=journal.id, status="Locked", timestamp=now + timedelta(minutes=15), is_active=False),
-        ]
-        db.add_all(history)
-        
-        # 3. Create Signers (Alice & Bob)
+        # 7. Create Signers
         alice = JournalSigner(
             journal_id=journal.id,
             full_name="Alice Wonderland",
             role="Grantor",
+            id_type="Driver License",
             id_number="DL123456789",
             status="Verified"
         )
@@ -83,50 +127,38 @@ async def seed_journal_data():
             journal_id=journal.id,
             full_name="Bob The Builder",
             role="Witness",
-            id_number="PENDING",
+            id_type="Passport",
+            id_number="P987654321",
             status="Pending"
         )
         db.add_all([alice, bob])
         await db.flush()
 
-        # 4. Create Biometrics (Signature images)
+        # 8. Create Biometrics
         alice_sign = JournalBiometric(signer_id=alice.id, signature_image="sign_alice.png")
         bob_sign = JournalBiometric(signer_id=bob.id, signature_image="sign_bob.png")
         db.add_all([alice_sign, bob_sign])
 
-        # 5. Create Fee Breakdown
+        # 9. Create Fee Breakdown
         fees = JournalFee(
             journal_id=journal.id,
             base_notarial_fee=15.00,
             service_fee=50.00,
-            travel_fee=25.00,
-            convenience_fee=5.00,
-            total_amount=95.00,
-            notary_share=66.50,
-            company_share=28.50
+            total_amount=65.00,
+            notary_share=45.50
         )
         db.add(fees)
 
-        # 6. Create Compliance Ledger
+        # 10. Create Compliance Ledger
         compliance = JournalCompliance(
             journal_id=journal.id,
             identity_verification=True,
-            mandatory_fields=False,
-            final_notary_seal=False
+            mandatory_fields=True,
+            final_notary_seal=True
         )
         db.add(compliance)
-        
-        # 6a. Record Initial Audit Log
-        initial_log = ActAuditLog(
-            journal_id=journal.id,
-            user_id=notary.id,
-            user_name=notary.full_name,
-            action="CREATED",
-            details="Draft act created from system template."
-        )
-        db.add(initial_log)
 
-        # 7. Create Reference Data (Void Reasons)
+        # 11. Reference Data
         void_reasons = [
             VoidReason(code="DATA_ERROR", name="Data Entry Error"),
             VoidReason(code="CLIENT_REQUEST", name="Client Requested Cancel"),
@@ -134,7 +166,7 @@ async def seed_journal_data():
         db.add_all(void_reasons)
 
         await db.commit()
-        logger.info(f"Successfully seeded Journal ID: {journal.id} with all sub-entities.")
+        logger.info(f"Successfully seeded Notary Act ID: {act.id} with Journal Record.")
 
 async def main():
     """Reset and Seed the database."""

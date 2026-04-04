@@ -1,1 +1,1 @@
-# Standard Python package marker for acts module.
+from app.modules.acts.router import router as acts_router

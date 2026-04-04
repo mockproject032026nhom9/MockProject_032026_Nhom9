@@ -12,18 +12,65 @@ classDiagram
     class User {
         +int id
         +string email
+        +string password_hash
         +string full_name
         +int role_id
+        +string status
+    }
+
+    class Notary {
+        +int id
+        +int user_id
+        +string ssn
+        +string full_name
+        +string date_of_birth
+        +string phone
+        +string email
+        +string residential_address
+        +string employment_type
+        +date start_date
+        +string internal_notes
+        +string status
+    }
+
+    class NotaryAct {
+        +int id
+        +int notary_id
+        +string status
+        +bool is_legal_hold
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class ActStatusHistory {
+        +int id
+        +int act_id
+        +string status
+        +datetime timestamp
+        +bool is_active
+    }
+
+    class ActAuditLog {
+        +int id
+        +int act_id
+        +int user_id
+        +string user_name
+        +string action
+        +string details
+        +datetime timestamp
     }
 
     class JournalEntry {
         +int id
-        +int notary_id
+        +int act_id
         +float notarial_fee
-        +string status
         +string act_type
-        +bool is_legal_hold
+        +string state
+        +string document_title
+        +int number_of_documents
         +string location
+        +string notary_notes
+        +datetime created_at
     }
 
     class JournalSigner {
@@ -31,6 +78,11 @@ classDiagram
         +int journal_id
         +string full_name
         +string role
+        +string id_type
+        +string id_number
+        +string id_authority
+        +datetime id_expiry_date
+        +string verification_method
         +string status
     }
 
@@ -44,30 +96,22 @@ classDiagram
     class JournalFee {
         +int id
         +int journal_id
+        +float base_notarial_fee
+        +float service_fee
+        +float travel_fee
+        +float convenience_fee
+        +float rush_fee
         +float total_amount
         +float notary_share
+        +float company_share
     }
 
     class JournalCompliance {
         +int id
         +int journal_id
         +bool identity_verification
+        +bool mandatory_fields
         +bool final_notary_seal
-    }
-
-    class JournalStatusHistory {
-        +int id
-        +int journal_id
-        +string status
-        +datetime timestamp
-    }
-
-    class ActAuditLog {
-        +int id
-        +int journal_id
-        +int user_id
-        +string action
-        +string details
     }
 
     class VoidReason {
@@ -75,76 +119,51 @@ classDiagram
         +string name
     }
 
-    Role "1" -- "*" User : has
-    User "1" -- "*" JournalEntry : records
-    JournalEntry "1" -- "*" JournalSigner : contains
-    JournalEntry "1" -- "1" JournalFee : has_breakdown
-    JournalEntry "1" -- "1" JournalCompliance : legal_checklist
-    JournalEntry "1" -- "*" JournalStatusHistory : timeline
-    JournalEntry "1" -- "*" ActAuditLog : audit_trail
-    JournalSigner "1" -- "1" JournalBiometric : captures
-    User "1" -- "*" ActAuditLog : performs
+    Role "1" -- "*" User : includes
+    User "1" -- "0..1" Notary : has_profile
+    Notary "1" -- "*" NotaryAct : manages
+    NotaryAct "1" -- "*" ActStatusHistory : timeline
+    NotaryAct "1" -- "*" ActAuditLog : audit_trail
+    NotaryAct "1" -- "*" JournalEntry : records
+    User "1" -- "*" ActAuditLog : performs_action
+    
+    JournalEntry "1" -- "*" JournalSigner : signers
+    JournalEntry "1" -- "1" JournalFee : fees
+    JournalEntry "1" -- "1" JournalCompliance : compliance
+    JournalSigner "1" -- "1" JournalBiometric : biometric
 ```
 
 This document provides a comprehensive overview of the Microsoft SQL Server (MSSQL) database schema for the Modular Notary Journal API. The schema is designed with normalization and traceability as core principles.
 
-## 1. System Core (Identity & Access)
+## 0. Identity & Professional Profiles
 
 | Table | Purpose | Key Relationships |
 |-------|---------|-------------------|
-| `roles` | RBAC roles (Admin, Dispatcher, Customer) | 1:N with `users` |
-| `users` | Identity management for Notaries and Admins | N:1 with `roles`, 1:N with `journal_entries` |
+| `users` | Identity management and RBAC. | N:1 with `roles`, 1:1 with `notaries`. |
+| `notaries` | Professional capacity profile (SSN, Employment). | 1:1 with `users`, 1:N with `notary_acts`. |
+| `act_status_history` | Detailed historical timeline of the session status changes. | N:1 with `NotaryAct`. |
+| `act_audit_logs` | Permanent audit trail of *who* performed *what* on this session. | N:1 with `NotaryAct`, N:1 with `User`. |
 
 ---
 
-## 2. Notary Journal Lifecycle (Master-Detail)
+## 2. Recording Layer (Journal Entries)
 
-The system uses a highly normalized structure for Journal Entries to ensure data integrity and ease of reporting.
+The "Journal" layer handles the specific documents and signers involved in an act.
 
-### Master Registry
-- **`journal_entries`**: The central record for a notarial act.
-  - Fields: `id`, `notary_id`, `notarial_fee`, `status` (Draft, Completed, Voided), `act_type`, `is_legal_hold` (Compliance flag), `location`, `notary_notes`.
-  - Relationships: 1:N with `JournalSigner`, `JournalStatusHistory`, `ActAuditLog`.
-
-### Supplemental Modules (1:1 with JournalEntry)
-- **`journal_fees`**: Detailed breakdown of the total amount charged.
-  - Fields: `base_notarial_fee`, `service_fee`, `travel_fee`, `total_amount`, `notary_share`.
-- **`journal_compliance`**: Legal checklist for each act.
-  - Fields: `identity_verification` (bool), `mandatory_fields` (bool), `final_notary_seal` (bool).
+| Table | Purpose | Key Relationships |
+|-------|---------|-------------------|
+| `journal_entries` | The actual journal record for a document within an act. | N:1 with `NotaryAct`, 1:N with `JournalSigner`. |
+| `journal_signers` | Individuals (Grantors, Witnesses) signing the document. | N:1 with `JournalEntry`, 1:1 with `JournalBiometric`. |
+| `journal_biometrics` | Signature and thumbprint image pointers for a signer. | 1:1 with `JournalSigner`. |
 
 ---
 
-## 3. Signers & Biometrics
+## 3. Financial & Compliance
 
-Each notarial act can have multiple signers, each with their own biometric verification.
-
-- **`journal_signers`**: Information about the individuals involved in the act.
-  - Fields: `full_name`, `role` (Grantor, Witness), `id_number`, `status`.
-  - Relationships: N:1 with `journal_entries`, 1:1 with `JournalBiometric`.
-- **`journal_biometrics`**: Secure links to physical capture files.
-  - Fields: `signature_image`, `thumbprint_image` (UUID-based file paths).
-  - Storage: Files are stored in `/uploads` and served as static assets.
-
----
-
-## 4. Traceability & Compliance
-
-Comprehensive history tracking for auditing purposes.
-
-- **`journal_status_history`**: Tracks every lifecycle phase of the act.
-  - Fields: `status`, `timestamp`, `is_active`.
-- **`act_audit_logs`**: Permanent record of *who* performed *what* action.
-  - Fields: `user_name` (denormalized), `action` (CREATED, VOIDED, LEGAL_HOLD), `details`, `timestamp`.
-  - *Note: Stores the `user_name` directly to preserve historical context if a user is deleted or renamed.*
-
----
-
-## 5. System References
-
-Used for standardizing dropdowns and business rules.
-
-- **`void_reasons`**: Lookup data for canceling an act.
-  - Fields: `code` (DATA_ERROR, CLIENT_REQUEST), `name`.
+| Table | Purpose | Key Relationships |
+|-------|---------|-------------------|
+| `journal_fees` | Breakdown of fees (service, notary share) for a specific record. | 1:1 with `JournalEntry`. |
+| `journal_compliance` | Checklist confirming legal requirements were met. | 1:1 with `JournalEntry`. |
 
 ---
 

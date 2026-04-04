@@ -1,7 +1,9 @@
 {
-    "python.defaultInterpreterPath": "C:\\Users\\DinhViet\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
-    "python.analysis.extraPaths": [
-        "./api"
-    ],
-    "python-envs.defaultEnvManager": "ms-python.python:system"
+  "files.exclude": {
+    "**/__pycache__": true,
+  },
+  "search.exclude": {
+    "**/__pycache__": true,
+  }
 }
+  

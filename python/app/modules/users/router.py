@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -8,7 +8,6 @@ from app.core.dependencies import RoleChecker, get_current_user
 from app.core.schemas import ApiResponse, Token
 from app.modules.users.models import User
 from app.modules.users.schemas import (
-    LoginSchema,
     UserCreate,
     UserOut,
     UserRole,
@@ -23,7 +22,7 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
     """User self-registration."""
     user = await user_service.create(db, user_in)
     return ApiResponse(
-        statusCode=201,
+        status_code=status.HTTP_201_CREATED,
         message="User registered successfully",
         data=user
     )
@@ -36,7 +35,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     user = await user_service.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
-            status_code=401,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -59,7 +58,10 @@ async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_db)):
     """ADMIN ONLY: Retrieve a user by ID."""
     user = await user_service.get_by_id(db, user_id)
     if not user:
-        return ApiResponse(statusCode=404, success=False, message="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with ID {user_id} not found"
+        )
     return ApiResponse(data=user)
 
 @router.patch("/{user_id}", response_model=ApiResponse[UserOut], dependencies=[Depends(RoleChecker([UserRole.ADMIN]))])
@@ -67,8 +69,12 @@ async def update_user(user_id: int, user_in: UserUpdate, db: AsyncSession = Depe
     """ADMIN ONLY: Update a user's details or role."""
     user = await user_service.update(db, user_id, user_in)
     if not user:
-        return ApiResponse(statusCode=404, success=False, message="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with ID {user_id} not found"
+        )
     return ApiResponse(
+        status_code=status.HTTP_200_OK,
         message="User updated successfully",
         data=user
     )
@@ -78,5 +84,12 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     """ADMIN ONLY: Permanently remove a user account."""
     success = await user_service.delete(db, user_id)
     if not success:
-        return ApiResponse(statusCode=404, success=False, message="User not found")
-    return ApiResponse(message="User deleted", data=True)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with ID {user_id} not found"
+        )
+    return ApiResponse(
+        status_code=status.HTTP_200_OK,
+        message="User deleted", 
+        data=True
+    )
