@@ -25,7 +25,7 @@ router = APIRouter(prefix="/acts", tags=["Acts"])
 async def get_acts(
     keyword: Optional[str] = Query(None, description="Search by ID, Notary Name, or Client Name"),
     act_type: Optional[ActTypeEnum] = Query(None, description="Filter by transaction type"),
-    status: Optional[StatusEnum] = Query(None, description="Filter by session status"),
+    act_status: Optional[StatusEnum] = Query(None, description="Filter by session status"),
     date_range: Optional[DateRangeEnum] = Query(None, description="Filter by creation date range"),
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=100),
@@ -36,7 +36,7 @@ async def get_acts(
     Used for the main Dashboard view.
     """
     acts_data = await act_service.get_acts_list(
-        db, keyword, act_type, status, date_range, page, size
+        db, keyword, act_type, act_status, date_range, page, size
     )
     return ApiResponse(
         status_code=status.HTTP_200_OK,
