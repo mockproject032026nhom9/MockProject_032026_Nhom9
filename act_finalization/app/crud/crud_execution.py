@@ -50,7 +50,7 @@ def update_execution_status(db: Session, act_id: str, payload: ExecutionUpdate):
         # Loại Jurat bắt buộc phải có (Oath)
         if act.type and act.type.upper() == "JURAT" and not journal.oath_administered:
             return None, "Oath/Affirmation is required for Jurat type"
-        # Bắt buộc phải có ít nhất 1 chữ ký trước khi Complete
+        # Bắt buộc phải có ít nhất một chữ ký trước khi Complete
         signatures = db.query(Signature).filter(Signature.act_id == act.id).all()
         if not signatures:
             return None, "Please collect the signer's signature"
