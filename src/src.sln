@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyVanPhongCongChung.API", "QuanLyVanPhongCongChung.API\QuanLyVanPhongCongChung.API.csproj", "{512472EE-2126-44C3-87C2-AF530760122A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyVanPhongCongChung.Application", "QuanLyVanPhongCongChung.Application\QuanLyVanPhongCongChung.Application.csproj", "{59871DAF-C6A1-7F61-6C4F-48E907F0AF97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyVanPhongCongChung.Domain", "QuanLyVanPhongCongChung.Domain\QuanLyVanPhongCongChung.Domain.csproj", "{02103C35-67B5-3BD4-9FEA-6FE5E262EF05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyVanPhongCongChung.Infrastructure", "QuanLyVanPhongCongChung.Infrastructure\QuanLyVanPhongCongChung.Infrastructure.csproj", "{70C27124-836B-FD04-0C09-6B697EB5D5B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyVanPhongCongChung.Persistence", "QuanLyVanPhongCongChung.Persistence\QuanLyVanPhongCongChung.Persistence.csproj", "{840AC43E-11F7-B3BB-F396-3192BFE8B87B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{512472EE-2126-44C3-87C2-AF530760122A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{512472EE-2126-44C3-87C2-AF530760122A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{512472EE-2126-44C3-87C2-AF530760122A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{512472EE-2126-44C3-87C2-AF530760122A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59871DAF-C6A1-7F61-6C4F-48E907F0AF97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59871DAF-C6A1-7F61-6C4F-48E907F0AF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59871DAF-C6A1-7F61-6C4F-48E907F0AF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59871DAF-C6A1-7F61-6C4F-48E907F0AF97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02103C35-67B5-3BD4-9FEA-6FE5E262EF05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02103C35-67B5-3BD4-9FEA-6FE5E262EF05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02103C35-67B5-3BD4-9FEA-6FE5E262EF05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02103C35-67B5-3BD4-9FEA-6FE5E262EF05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C27124-836B-FD04-0C09-6B697EB5D5B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C27124-836B-FD04-0C09-6B697EB5D5B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C27124-836B-FD04-0C09-6B697EB5D5B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C27124-836B-FD04-0C09-6B697EB5D5B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{840AC43E-11F7-B3BB-F396-3192BFE8B87B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{840AC43E-11F7-B3BB-F396-3192BFE8B87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{840AC43E-11F7-B3BB-F396-3192BFE8B87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{840AC43E-11F7-B3BB-F396-3192BFE8B87B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73750FD3-451B-4405-9A28-53C6467DD749}
+	EndGlobalSection
+EndGlobal

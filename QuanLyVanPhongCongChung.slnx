@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Bản sao của SC009_Export.png" />
+    <File Path="C:/Users/Ngo Duong Hoang Chau/Downloads/DataBase.drawio (1).docx" />
+    <File Path="QL Van Phong Cong Chung Tai My_09_EN-merged.docx" />
+    <File Path="Thay doi yeu cau_EN (1).docx" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/QuanLyVanPhongCongChung.API/QuanLyVanPhongCongChung.API.csproj" />
+    <Project Path="src/QuanLyVanPhongCongChung.Application/QuanLyVanPhongCongChung.Application.csproj" />
+    <Project Path="src/QuanLyVanPhongCongChung.Domain/QuanLyVanPhongCongChung.Domain.csproj" />
+    <Project Path="src/QuanLyVanPhongCongChung.Infrastructure/QuanLyVanPhongCongChung.Infrastructure.csproj" />
+    <Project Path="src/QuanLyVanPhongCongChung.Persistence/QuanLyVanPhongCongChung.Persistence.csproj" />
+  </Folder>
+</Solution>
