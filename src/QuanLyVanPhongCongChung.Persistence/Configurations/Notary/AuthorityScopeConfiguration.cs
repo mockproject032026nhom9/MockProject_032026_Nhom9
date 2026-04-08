@@ -8,7 +8,7 @@ public class AuthorityScopeConfiguration : IEntityTypeConfiguration<AuthoritySco
 {
     public void Configure(EntityTypeBuilder<AuthorityScope> builder)
     {
-        builder.ToTable("authority_scopes");
+        builder.ToTable("AuthorityScopes");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).HasColumnName("id");
         builder.Property(a => a.CommissionId).HasColumnName("commission_id");

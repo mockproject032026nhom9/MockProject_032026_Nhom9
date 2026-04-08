@@ -8,7 +8,7 @@ public class NotarialActConfiguration : IEntityTypeConfiguration<NotarialAct>
 {
     public void Configure(EntityTypeBuilder<NotarialAct> builder)
     {
-        builder.ToTable("notarial_acts");
+        builder.ToTable("NotarialActs");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).HasColumnName("id");
         builder.Property(a => a.RequestId).HasColumnName("request_id");

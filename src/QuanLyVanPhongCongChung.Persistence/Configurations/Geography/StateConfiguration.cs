@@ -8,7 +8,7 @@ public class StateConfiguration : IEntityTypeConfiguration<State>
 {
     public void Configure(EntityTypeBuilder<State> builder)
     {
-        builder.ToTable("states");
+        builder.ToTable("States");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.StateCode).HasColumnName("state_code").HasMaxLength(10).IsRequired();

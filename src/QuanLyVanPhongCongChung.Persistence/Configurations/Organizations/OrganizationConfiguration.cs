@@ -8,7 +8,7 @@ public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
 {
     public void Configure(EntityTypeBuilder<Organization> builder)
     {
-        builder.ToTable("organizations");
+        builder.ToTable("Organizations");
         builder.HasKey(o => o.Id);
         builder.Property(o => o.Id).HasColumnName("id");
         builder.Property(o => o.Name).HasColumnName("name").HasMaxLength(200).IsRequired();

@@ -8,7 +8,7 @@ public class CertificateConfiguration : IEntityTypeConfiguration<Certificate>
 {
     public void Configure(EntityTypeBuilder<Certificate> builder)
     {
-        builder.ToTable("certificates");
+        builder.ToTable("Certificates");
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).HasColumnName("id");
         builder.Property(c => c.OwnerUserId).HasColumnName("owner_user_id");
@@ -51,7 +51,7 @@ public class CertificateConfiguration : IEntityTypeConfiguration<Certificate>
         builder.HasOne(c => c.ReplaceCert)
             .WithMany()
             .HasForeignKey(c => c.ReplaceCertId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(c => c.DigitalSignatures)
             .WithOne(d => d.Certificate)

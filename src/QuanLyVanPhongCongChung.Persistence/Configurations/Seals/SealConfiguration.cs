@@ -8,7 +8,7 @@ public class SealConfiguration : IEntityTypeConfiguration<Seal>
 {
     public void Configure(EntityTypeBuilder<Seal> builder)
     {
-        builder.ToTable("seals");
+        builder.ToTable("Seals");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.CommissionId).HasColumnName("commission_id");
@@ -33,7 +33,7 @@ public class SealConfiguration : IEntityTypeConfiguration<Seal>
         builder.HasOne(s => s.ReplaceSeal)
             .WithMany()
             .HasForeignKey(s => s.ReplaceSealId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(s => s.UsageLogs)
             .WithOne(u => u.Seal)

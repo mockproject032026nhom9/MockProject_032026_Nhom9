@@ -8,7 +8,7 @@ public class RevocationConfiguration : IEntityTypeConfiguration<Revocation>
 {
     public void Configure(EntityTypeBuilder<Revocation> builder)
     {
-        builder.ToTable("revocations");
+        builder.ToTable("Revocations");
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Id).HasColumnName("id");
         builder.Property(r => r.SealId).HasColumnName("seal_id");

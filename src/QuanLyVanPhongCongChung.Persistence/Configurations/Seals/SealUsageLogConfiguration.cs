@@ -8,7 +8,7 @@ public class SealUsageLogConfiguration : IEntityTypeConfiguration<SealUsageLog>
 {
     public void Configure(EntityTypeBuilder<SealUsageLog> builder)
     {
-        builder.ToTable("seal_usage_logs");
+        builder.ToTable("SealUsageLogs");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.SealId).HasColumnName("seal_id");

@@ -8,7 +8,7 @@ public class ExportHistoryConfiguration : IEntityTypeConfiguration<ExportHistory
 {
     public void Configure(EntityTypeBuilder<ExportHistory> builder)
     {
-        builder.ToTable("export_histories");
+        builder.ToTable("ExportHistories");
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.RequestedBy).HasColumnName("requested_by");

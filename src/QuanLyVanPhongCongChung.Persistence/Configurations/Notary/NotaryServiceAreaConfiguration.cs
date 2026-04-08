@@ -8,7 +8,7 @@ public class NotaryServiceAreaConfiguration : IEntityTypeConfiguration<NotarySer
 {
     public void Configure(EntityTypeBuilder<NotaryServiceArea> builder)
     {
-        builder.ToTable("notary_service_areas");
+        builder.ToTable("NotaryServiceAreas");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.StateId).HasColumnName("state_id");

@@ -8,7 +8,7 @@ public class JournalEntryConfiguration : IEntityTypeConfiguration<JournalEntry>
 {
     public void Configure(EntityTypeBuilder<JournalEntry> builder)
     {
-        builder.ToTable("journal_entries");
+        builder.ToTable("JournalEntries");
         builder.HasKey(j => j.Id);
         builder.Property(j => j.Id).HasColumnName("id");
         builder.Property(j => j.NotaryId).HasColumnName("notary_id");

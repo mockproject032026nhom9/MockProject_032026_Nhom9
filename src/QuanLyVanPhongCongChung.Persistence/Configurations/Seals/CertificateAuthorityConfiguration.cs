@@ -8,7 +8,7 @@ public class CertificateAuthorityConfiguration : IEntityTypeConfiguration<Certif
 {
     public void Configure(EntityTypeBuilder<CertificateAuthority> builder)
     {
-        builder.ToTable("certificate_authorities");
+        builder.ToTable("CertificateAuthorities");
         builder.HasKey(ca => ca.Id);
         builder.Property(ca => ca.Id).HasColumnName("id");
         builder.Property(ca => ca.Name).HasColumnName("name").HasMaxLength(200).IsRequired();

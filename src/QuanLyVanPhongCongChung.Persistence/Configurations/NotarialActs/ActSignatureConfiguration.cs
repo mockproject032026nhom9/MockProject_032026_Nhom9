@@ -8,7 +8,7 @@ public class ActSignatureConfiguration : IEntityTypeConfiguration<ActSignature>
 {
     public void Configure(EntityTypeBuilder<ActSignature> builder)
     {
-        builder.ToTable("act_signatures");
+        builder.ToTable("ActSignatures");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.ActId).HasColumnName("act_id");

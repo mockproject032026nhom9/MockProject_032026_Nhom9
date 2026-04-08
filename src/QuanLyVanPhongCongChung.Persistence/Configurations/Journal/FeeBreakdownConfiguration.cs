@@ -8,7 +8,7 @@ public class FeeBreakdownConfiguration : IEntityTypeConfiguration<FeeBreakdown>
 {
     public void Configure(EntityTypeBuilder<FeeBreakdown> builder)
     {
-        builder.ToTable("fee_breakdowns");
+        builder.ToTable("FeeBreakdowns");
         builder.HasKey(f => f.Id);
         builder.Property(f => f.Id).HasColumnName("id");
         builder.Property(f => f.JournalEntryId).HasColumnName("journal_entry_id");

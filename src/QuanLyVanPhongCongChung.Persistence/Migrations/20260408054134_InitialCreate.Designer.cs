@@ -12,7 +12,7 @@ using QuanLyVanPhongCongChung.Persistence.Context;
 namespace QuanLyVanPhongCongChung.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260404010916_InitialCreate")]
+    [Migration("20260408054134_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("LangCode")
                         .IsUnique();
 
-                    b.ToTable("languages", (string)null);
+                    b.ToTable("Languages", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Geography.State", b =>
@@ -76,7 +76,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("StateCode")
                         .IsUnique();
 
-                    b.ToTable("states", (string)null);
+                    b.ToTable("States", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Identity.Role", b =>
@@ -97,7 +97,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("RoleName")
                         .IsUnique();
 
-                    b.ToTable("roles", (string)null);
+                    b.ToTable("Roles", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Identity.User", b =>
@@ -176,7 +176,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("Users", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Jobs.Event", b =>
@@ -194,7 +194,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("Events", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Jobs.Job", b =>
@@ -267,7 +267,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("jobs", (string)null);
+                    b.ToTable("Jobs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Jobs.JobAssignment", b =>
@@ -305,7 +305,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId", "Status");
 
-                    b.ToTable("job_assignments", (string)null);
+                    b.ToTable("JobAssignments", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Jobs.JobStatusLog", b =>
@@ -348,7 +348,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("job_status_logs", (string)null);
+                    b.ToTable("JobStatusLogs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Jobs.Notification", b =>
@@ -356,7 +356,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id");
+                        .HasColumnName("notification_id");
 
                     b.Property<bool>("App")
                         .HasColumnType("bit")
@@ -390,7 +390,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("datetimeoffset")
-                        .HasColumnName("timestamp");
+                        .HasColumnName("time_stamp");
 
                     b.HasKey("Id");
 
@@ -398,7 +398,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("notifications", (string)null);
+                    b.ToTable("Notifications", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Journal.BiometricData", b =>
@@ -422,7 +422,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("SignerId")
                         .IsUnique();
 
-                    b.ToTable("biometric_data", (string)null);
+                    b.ToTable("BiometricData", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Journal.ExportHistory", b =>
@@ -463,7 +463,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("RequestedBy");
 
-                    b.ToTable("export_histories", (string)null);
+                    b.ToTable("ExportHistories", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Journal.FeeBreakdown", b =>
@@ -522,7 +522,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("JournalEntryId")
                         .IsUnique();
 
-                    b.ToTable("fee_breakdowns", (string)null);
+                    b.ToTable("FeeBreakdowns", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Journal.JournalEntry", b =>
@@ -571,7 +571,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("journal_entries", (string)null);
+                    b.ToTable("JournalEntries", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Journal.Signer", b =>
@@ -595,7 +595,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("JournalEntryId");
 
-                    b.ToTable("signers", (string)null);
+                    b.ToTable("Signers", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.NotarialActs.ActLogEntry", b =>
@@ -623,7 +623,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId");
 
-                    b.ToTable("act_log_entries", (string)null);
+                    b.ToTable("ActLogEntries", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.NotarialActs.ActSignature", b =>
@@ -662,7 +662,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("act_signatures", (string)null);
+                    b.ToTable("ActSignatures", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.NotarialActs.ComplianceReview", b =>
@@ -685,7 +685,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("ActId");
 
-                    b.ToTable("compliance_reviews", (string)null);
+                    b.ToTable("ComplianceReviews", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.NotarialActs.NotarialAct", b =>
@@ -747,7 +747,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("notarial_acts", (string)null);
+                    b.ToTable("NotarialActs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.AuthorityScope", b =>
@@ -771,7 +771,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("CommissionId");
 
-                    b.ToTable("authority_scopes", (string)null);
+                    b.ToTable("AuthorityScopes", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.Notary", b =>
@@ -872,7 +872,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("notaries", (string)null);
+                    b.ToTable("Notaries", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryAuditLog", b =>
@@ -923,7 +923,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId", "CreatedAt");
 
-                    b.ToTable("notary_audit_logs", (string)null);
+                    b.ToTable("NotaryAuditLogs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryAvailability", b =>
@@ -959,7 +959,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("NotaryId")
                         .IsUnique();
 
-                    b.ToTable("notary_availabilities", (string)null);
+                    b.ToTable("NotaryAvailabilities", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryBond", b =>
@@ -1001,7 +1001,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId");
 
-                    b.ToTable("notary_bonds", (string)null);
+                    b.ToTable("NotaryBonds", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryCapability", b =>
@@ -1041,7 +1041,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("NotaryId")
                         .IsUnique();
 
-                    b.ToTable("notary_capabilities", (string)null);
+                    b.ToTable("NotaryCapabilities", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryCommission", b =>
@@ -1057,9 +1057,11 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("commission_number");
 
-                    b.Property<Guid>("CommissionStateId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("commission_state_id");
+                    b.Property<string>("CommissionState")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("commission_state");
 
                     b.Property<DateOnly?>("ExpectedRenewalDate")
                         .HasColumnType("date")
@@ -1089,13 +1091,13 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommissionStateId");
+                    b.HasIndex("CommissionState");
 
                     b.HasIndex("ExpirationDate");
 
                     b.HasIndex("NotaryId", "Status");
 
-                    b.ToTable("notary_commissions", (string)null);
+                    b.ToTable("NotaryCommissions", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryDocument", b =>
@@ -1148,7 +1150,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId", "DocCategory");
 
-                    b.ToTable("notary_documents", (string)null);
+                    b.ToTable("NotaryDocuments", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryIncident", b =>
@@ -1194,7 +1196,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId", "Status");
 
-                    b.ToTable("notary_incidents", (string)null);
+                    b.ToTable("NotaryIncidents", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryInsurance", b =>
@@ -1208,6 +1210,10 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("coverage_amount");
+
+                    b.Property<DateOnly>("EffectiveDate")
+                        .HasColumnType("date")
+                        .HasColumnName("effective_date");
 
                     b.Property<DateOnly>("ExpirationDate")
                         .HasColumnType("date")
@@ -1238,7 +1244,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId");
 
-                    b.ToTable("notary_insurances", (string)null);
+                    b.ToTable("NotaryInsurances", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryServiceArea", b =>
@@ -1267,7 +1273,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId", "StateId");
 
-                    b.ToTable("notary_service_areas", (string)null);
+                    b.ToTable("NotaryServiceAreas", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryStatusHistory", b =>
@@ -1305,7 +1311,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("NotaryId");
 
-                    b.ToTable("notary_status_history", (string)null);
+                    b.ToTable("NotaryStatusHistory", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.RonTechnology", b =>
@@ -1337,7 +1343,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("CapabilityId")
                         .IsUnique();
 
-                    b.ToTable("ron_technologies", (string)null);
+                    b.ToTable("RonTechnologies", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Delivery", b =>
@@ -1368,7 +1374,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("RequestId")
                         .IsUnique();
 
-                    b.ToTable("deliveries", (string)null);
+                    b.ToTable("Deliveries", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Document", b =>
@@ -1395,7 +1401,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("documents", (string)null);
+                    b.ToTable("Documents", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Organization", b =>
@@ -1436,7 +1442,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("organizations", (string)null);
+                    b.ToTable("Organizations", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Payment", b =>
@@ -1475,7 +1481,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("payments", (string)null);
+                    b.ToTable("Payments", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.ServiceRequest", b =>
@@ -1493,6 +1499,10 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("created_by");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("customer_id");
 
                     b.Property<DateTimeOffset?>("LastModifiedAt")
                         .HasColumnType("datetimeoffset")
@@ -1515,9 +1525,11 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("service_requests", (string)null);
+                    b.ToTable("ServiceRequests", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Verification", b =>
@@ -1546,7 +1558,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasIndex("RequestId")
                         .IsUnique();
 
-                    b.ToTable("verifications", (string)null);
+                    b.ToTable("Verifications", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.Certificate", b =>
@@ -1646,7 +1658,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("certificates", (string)null);
+                    b.ToTable("Certificates", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.CertificateAuthority", b =>
@@ -1668,7 +1680,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("certificate_authorities", (string)null);
+                    b.ToTable("CertificateAuthorities", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.Device", b =>
@@ -1708,7 +1720,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("devices", (string)null);
+                    b.ToTable("Devices", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.DigitalSignature", b =>
@@ -1765,7 +1777,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("digital_signatures", (string)null);
+                    b.ToTable("DigitalSignatures", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.HsmKeyStorage", b =>
@@ -1803,7 +1815,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("hsm_key_storages", (string)null);
+                    b.ToTable("HsmKeyStorages", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.Seal", b =>
@@ -1885,7 +1897,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("seals", (string)null);
+                    b.ToTable("Seals", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Seals.SealUsageLog", b =>
@@ -1921,7 +1933,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("seal_usage_logs", (string)null);
+                    b.ToTable("SealUsageLogs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Security.AuditLog", b =>
@@ -1967,7 +1979,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("EntityType", "EntityId");
 
-                    b.ToTable("audit_logs", (string)null);
+                    b.ToTable("AuditLogs", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Security.Replacement", b =>
@@ -2019,7 +2031,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("RevocationId");
 
-                    b.ToTable("replacements", (string)null);
+                    b.ToTable("Replacements", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Security.Revocation", b =>
@@ -2065,7 +2077,55 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
                     b.HasIndex("SealId");
 
-                    b.ToTable("revocations", (string)null);
+                    b.ToTable("Revocations", "dbo");
+                });
+
+            modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Security.SecurityIncident", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("CertificateId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("certificate_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTimeOffset>("ReportedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("reported_at");
+
+                    b.Property<Guid>("ReportedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("reported_by");
+
+                    b.Property<Guid?>("SealId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("seal_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CertificateId");
+
+                    b.HasIndex("ReportedAt");
+
+                    b.HasIndex("ReportedBy");
+
+                    b.HasIndex("SealId");
+
+                    b.ToTable("Incidents", "dbo");
                 });
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Identity.User", b =>
@@ -2330,19 +2390,11 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryCommission", b =>
                 {
-                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Geography.State", "CommissionState")
-                        .WithMany()
-                        .HasForeignKey("CommissionStateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Notary.Notary", "Notary")
                         .WithMany("Commissions")
                         .HasForeignKey("NotaryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CommissionState");
 
                     b.Navigation("Notary");
                 });
@@ -2456,10 +2508,17 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
 
             modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Organizations.ServiceRequest", b =>
                 {
+                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Identity.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Organizations.Organization", "Organization")
                         .WithMany("Requests")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Organization");
                 });
@@ -2502,7 +2561,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Certificate", "ReplaceCert")
                         .WithMany()
                         .HasForeignKey("ReplaceCertId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Ca");
 
@@ -2563,7 +2622,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Seal", "ReplaceSeal")
                         .WithMany()
                         .HasForeignKey("ReplaceSealId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Commission");
 
@@ -2604,22 +2663,22 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Certificate", "NewCertificate")
                         .WithMany()
                         .HasForeignKey("NewCertificateId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Seal", "NewSeal")
                         .WithMany()
                         .HasForeignKey("NewSealId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Certificate", "OldCertificate")
                         .WithMany()
                         .HasForeignKey("OldCertificateId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Seal", "OldSeal")
                         .WithMany()
                         .HasForeignKey("OldSealId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Identity.User", "PerformedByUser")
                         .WithMany()
@@ -2630,7 +2689,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Security.Revocation", "Revocation")
                         .WithMany()
                         .HasForeignKey("RevocationId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("NewCertificate");
 
@@ -2652,7 +2711,7 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                         .HasForeignKey("CertificateId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Notary.NotaryIncident", "Incident")
+                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Security.SecurityIncident", "Incident")
                         .WithMany()
                         .HasForeignKey("IncidentId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -2673,6 +2732,31 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                     b.Navigation("Incident");
 
                     b.Navigation("PerformedByUser");
+
+                    b.Navigation("Seal");
+                });
+
+            modelBuilder.Entity("QuanLyVanPhongCongChung.Domain.Entities.Security.SecurityIncident", b =>
+                {
+                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Certificate", "Certificate")
+                        .WithMany()
+                        .HasForeignKey("CertificateId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Identity.User", "ReportedByUser")
+                        .WithMany()
+                        .HasForeignKey("ReportedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyVanPhongCongChung.Domain.Entities.Seals.Seal", "Seal")
+                        .WithMany()
+                        .HasForeignKey("SealId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Certificate");
+
+                    b.Navigation("ReportedByUser");
 
                     b.Navigation("Seal");
                 });

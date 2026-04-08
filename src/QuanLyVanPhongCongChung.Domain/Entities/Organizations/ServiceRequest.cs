@@ -5,9 +5,11 @@ using QuanLyVanPhongCongChung.Domain.Enums;
 
 public class ServiceRequest : BaseAuditableEntity, IAggregateRoot
 {
+    public Guid? CustomerId { get; private set; }
     public Guid? OrganizationId { get; private set; }
     public RequestStatus Status { get; private set; }
 
+    public Identity.User? Customer { get; private set; }
     public Organization? Organization { get; private set; }
 
     private Verification? _verification = null;
@@ -24,10 +26,11 @@ public class ServiceRequest : BaseAuditableEntity, IAggregateRoot
 
     private ServiceRequest() { }
 
-    public static ServiceRequest Create(RequestStatus status, Guid? organizationId = null)
+    public static ServiceRequest Create(RequestStatus status, Guid? customerId = null, Guid? organizationId = null)
     {
         return new ServiceRequest
         {
+            CustomerId = customerId,
             OrganizationId = organizationId,
             Status = status
         };

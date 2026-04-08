@@ -8,7 +8,7 @@ public class NotaryIncidentConfiguration : IEntityTypeConfiguration<NotaryIncide
 {
     public void Configure(EntityTypeBuilder<NotaryIncident> builder)
     {
-        builder.ToTable("notary_incidents");
+        builder.ToTable("NotaryIncidents");
         builder.HasKey(i => i.Id);
         builder.Property(i => i.Id).HasColumnName("id");
         builder.Property(i => i.NotaryId).HasColumnName("notary_id");

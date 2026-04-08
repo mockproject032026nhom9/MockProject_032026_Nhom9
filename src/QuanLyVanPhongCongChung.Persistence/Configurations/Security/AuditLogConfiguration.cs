@@ -8,7 +8,7 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 {
     public void Configure(EntityTypeBuilder<AuditLog> builder)
     {
-        builder.ToTable("audit_logs");
+        builder.ToTable("AuditLogs");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).HasColumnName("id");
         builder.Property(a => a.UserId).HasColumnName("user_id");

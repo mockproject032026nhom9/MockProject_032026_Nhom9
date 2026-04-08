@@ -69,6 +69,7 @@ public class ApplicationDbContext(
 
     // Security
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<SecurityIncident> SecurityIncidents => Set<SecurityIncident>();
     public DbSet<Revocation> Revocations => Set<Revocation>();
     public DbSet<Replacement> Replacements => Set<Replacement>();
 
@@ -87,6 +88,7 @@ public class ApplicationDbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplySqlServerNamingConventions();
 
         // Global convention: store all enums as strings
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())

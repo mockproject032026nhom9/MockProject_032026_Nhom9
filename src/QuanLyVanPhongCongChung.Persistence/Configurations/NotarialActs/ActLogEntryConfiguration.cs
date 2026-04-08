@@ -8,7 +8,7 @@ public class ActLogEntryConfiguration : IEntityTypeConfiguration<ActLogEntry>
 {
     public void Configure(EntityTypeBuilder<ActLogEntry> builder)
     {
-        builder.ToTable("act_log_entries");
+        builder.ToTable("ActLogEntries");
         builder.HasKey(l => l.Id);
         builder.Property(l => l.Id).HasColumnName("id");
         builder.Property(l => l.ActId).HasColumnName("act_id");

@@ -8,7 +8,7 @@ public class VerificationConfiguration : IEntityTypeConfiguration<Verification>
 {
     public void Configure(EntityTypeBuilder<Verification> builder)
     {
-        builder.ToTable("verifications");
+        builder.ToTable("Verifications");
         builder.HasKey(v => v.Id);
         builder.Property(v => v.Id).HasColumnName("id");
         builder.Property(v => v.RequestId).HasColumnName("request_id");

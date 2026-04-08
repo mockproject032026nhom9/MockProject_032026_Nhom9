@@ -8,7 +8,7 @@ public class BiometricDataConfiguration : IEntityTypeConfiguration<BiometricData
 {
     public void Configure(EntityTypeBuilder<BiometricData> builder)
     {
-        builder.ToTable("biometric_data");
+        builder.ToTable("BiometricData");
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Id).HasColumnName("id");
         builder.Property(b => b.SignerId).HasColumnName("signer_id");

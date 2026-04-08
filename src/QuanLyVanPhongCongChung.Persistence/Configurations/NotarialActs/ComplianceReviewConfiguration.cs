@@ -8,7 +8,7 @@ public class ComplianceReviewConfiguration : IEntityTypeConfiguration<Compliance
 {
     public void Configure(EntityTypeBuilder<ComplianceReview> builder)
     {
-        builder.ToTable("compliance_reviews");
+        builder.ToTable("ComplianceReviews");
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Id).HasColumnName("id");
         builder.Property(r => r.ActId).HasColumnName("act_id");

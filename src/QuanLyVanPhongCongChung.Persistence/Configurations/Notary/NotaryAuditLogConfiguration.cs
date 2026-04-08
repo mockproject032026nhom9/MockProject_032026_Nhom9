@@ -8,7 +8,7 @@ public class NotaryAuditLogConfiguration : IEntityTypeConfiguration<NotaryAuditL
 {
     public void Configure(EntityTypeBuilder<NotaryAuditLog> builder)
     {
-        builder.ToTable("notary_audit_logs");
+        builder.ToTable("NotaryAuditLogs");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).HasColumnName("id");
         builder.Property(a => a.NotaryId).HasColumnName("notary_id");

@@ -8,7 +8,7 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 {
     public void Configure(EntityTypeBuilder<Event> builder)
     {
-        builder.ToTable("events");
+        builder.ToTable("Events");
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("event_id");
         builder.Property(e => e.EventName).HasColumnName("event_name").HasMaxLength(200).IsRequired();

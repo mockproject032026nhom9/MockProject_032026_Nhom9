@@ -8,7 +8,7 @@ public class JobStatusLogConfiguration : IEntityTypeConfiguration<JobStatusLog>
 {
     public void Configure(EntityTypeBuilder<JobStatusLog> builder)
     {
-        builder.ToTable("job_status_logs");
+        builder.ToTable("JobStatusLogs");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("job_status_id");
         builder.Property(s => s.JobId).HasColumnName("job_id");

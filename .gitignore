@@ -530,3 +530,5 @@ id_ed25519
 !**/appsettings.sample.json
 !**/NuGet.Config.example
 !**/nuget.config.example
+
+docs/

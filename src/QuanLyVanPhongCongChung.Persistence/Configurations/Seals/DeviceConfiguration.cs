@@ -8,7 +8,7 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
 {
     public void Configure(EntityTypeBuilder<Device> builder)
     {
-        builder.ToTable("devices");
+        builder.ToTable("Devices");
         builder.HasKey(d => d.Id);
         builder.Property(d => d.Id).HasColumnName("id");
         builder.Property(d => d.UserId).HasColumnName("user_id");

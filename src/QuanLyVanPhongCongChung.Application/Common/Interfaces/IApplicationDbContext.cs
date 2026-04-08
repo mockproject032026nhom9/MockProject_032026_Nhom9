@@ -63,6 +63,7 @@ public interface IApplicationDbContext
 
     // Security
     DbSet<AuditLog> AuditLogs { get; }
+    DbSet<SecurityIncident> SecurityIncidents { get; }
     DbSet<Revocation> Revocations { get; }
     DbSet<Replacement> Replacements { get; }
 

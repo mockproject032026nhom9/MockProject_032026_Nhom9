@@ -8,7 +8,7 @@ public class SignerConfiguration : IEntityTypeConfiguration<Signer>
 {
     public void Configure(EntityTypeBuilder<Signer> builder)
     {
-        builder.ToTable("signers");
+        builder.ToTable("Signers");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.JournalEntryId).HasColumnName("journal_entry_id");

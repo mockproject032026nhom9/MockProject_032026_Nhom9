@@ -8,7 +8,7 @@ public class RonTechnologyConfiguration : IEntityTypeConfiguration<RonTechnology
 {
     public void Configure(EntityTypeBuilder<RonTechnology> builder)
     {
-        builder.ToTable("ron_technologies");
+        builder.ToTable("RonTechnologies");
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Id).HasColumnName("id");
         builder.Property(r => r.CapabilityId).HasColumnName("capability_id");

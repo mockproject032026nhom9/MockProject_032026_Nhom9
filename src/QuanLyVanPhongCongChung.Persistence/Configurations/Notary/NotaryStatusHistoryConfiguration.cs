@@ -8,7 +8,7 @@ public class NotaryStatusHistoryConfiguration : IEntityTypeConfiguration<NotaryS
 {
     public void Configure(EntityTypeBuilder<NotaryStatusHistory> builder)
     {
-        builder.ToTable("notary_status_history");
+        builder.ToTable("NotaryStatusHistory");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
         builder.Property(s => s.NotaryId).HasColumnName("notary_id");

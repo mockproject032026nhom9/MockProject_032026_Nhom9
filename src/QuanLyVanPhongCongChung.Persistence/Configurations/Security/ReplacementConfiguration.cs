@@ -8,7 +8,7 @@ public class ReplacementConfiguration : IEntityTypeConfiguration<Replacement>
 {
     public void Configure(EntityTypeBuilder<Replacement> builder)
     {
-        builder.ToTable("replacements");
+        builder.ToTable("Replacements");
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Id).HasColumnName("id");
         builder.Property(r => r.OldSealId).HasColumnName("old_seal_id");
@@ -22,22 +22,22 @@ public class ReplacementConfiguration : IEntityTypeConfiguration<Replacement>
         builder.HasOne(r => r.OldSeal)
             .WithMany()
             .HasForeignKey(r => r.OldSealId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(r => r.NewSeal)
             .WithMany()
             .HasForeignKey(r => r.NewSealId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(r => r.OldCertificate)
             .WithMany()
             .HasForeignKey(r => r.OldCertificateId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(r => r.NewCertificate)
             .WithMany()
             .HasForeignKey(r => r.NewCertificateId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(r => r.PerformedByUser)
             .WithMany()
@@ -47,7 +47,7 @@ public class ReplacementConfiguration : IEntityTypeConfiguration<Replacement>
         builder.HasOne(r => r.Revocation)
             .WithMany()
             .HasForeignKey(r => r.RevocationId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(r => r.OldSealId);
         builder.HasIndex(r => r.NewSealId);

@@ -8,7 +8,7 @@ public class HsmKeyStorageConfiguration : IEntityTypeConfiguration<HsmKeyStorage
 {
     public void Configure(EntityTypeBuilder<HsmKeyStorage> builder)
     {
-        builder.ToTable("hsm_key_storages");
+        builder.ToTable("HsmKeyStorages");
         builder.HasKey(h => h.Id);
         builder.Property(h => h.Id).HasColumnName("id");
         builder.Property(h => h.ProviderName).HasColumnName("provider_name").HasMaxLength(200).IsRequired();

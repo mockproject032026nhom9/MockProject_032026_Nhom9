@@ -11,6 +11,7 @@ using QuanLyVanPhongCongChung.Domain.Entities.Seals;
 using QuanLyVanPhongCongChung.Domain.Entities.Security;
 using QuanLyVanPhongCongChung.Domain.Entities.Organizations;
 using QuanLyVanPhongCongChung.Domain.Entities.Geography;
+using QuanLyVanPhongCongChung.Persistence.Extensions;
 
 public class ReadOnlyApplicationDbContext(
     DbContextOptions<ReadOnlyApplicationDbContext> options
@@ -84,6 +85,7 @@ public class ReadOnlyApplicationDbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplySqlServerNamingConventions();
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {

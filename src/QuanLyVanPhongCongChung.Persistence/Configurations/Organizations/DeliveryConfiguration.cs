@@ -8,7 +8,7 @@ public class DeliveryConfiguration : IEntityTypeConfiguration<Delivery>
 {
     public void Configure(EntityTypeBuilder<Delivery> builder)
     {
-        builder.ToTable("deliveries");
+        builder.ToTable("Deliveries");
         builder.HasKey(d => d.Id);
         builder.Property(d => d.Id).HasColumnName("id");
         builder.Property(d => d.RequestId).HasColumnName("request_id");

@@ -14,7 +14,7 @@ public class Revocation : BaseEntity
     public Seals.Seal? Seal { get; private set; }
     public Seals.Certificate? Certificate { get; private set; }
     public Identity.User PerformedByUser { get; private set; } = null!;
-    public Notary.NotaryIncident? Incident { get; private set; }
+    public SecurityIncident? Incident { get; private set; }
 
     private Revocation() { }
 

@@ -8,6 +8,7 @@ public class NotaryInsurance : BaseEntity
     public string PolicyNumber { get; private set; } = null!;
     public string ProviderName { get; private set; } = null!;
     public decimal CoverageAmount { get; private set; }
+    public DateOnly EffectiveDate { get; private set; }
     public DateOnly ExpirationDate { get; private set; }
     public string? FileUrl { get; private set; }
 
@@ -16,7 +17,7 @@ public class NotaryInsurance : BaseEntity
     private NotaryInsurance() { }
 
     public static NotaryInsurance Create(Guid notaryId, string policyNumber, string providerName,
-        decimal coverageAmount, DateOnly expirationDate)
+        decimal coverageAmount, DateOnly effectiveDate, DateOnly expirationDate)
     {
         return new NotaryInsurance
         {
@@ -24,6 +25,7 @@ public class NotaryInsurance : BaseEntity
             PolicyNumber = policyNumber,
             ProviderName = providerName,
             CoverageAmount = coverageAmount,
+            EffectiveDate = effectiveDate,
             ExpirationDate = expirationDate
         };
     }

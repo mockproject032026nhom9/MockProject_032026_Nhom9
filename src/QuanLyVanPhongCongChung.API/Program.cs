@@ -3,13 +3,16 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using QuanLyVanPhongCongChung.API.Authorization;
 using QuanLyVanPhongCongChung.API.Middleware;
 using QuanLyVanPhongCongChung.Application;
 using QuanLyVanPhongCongChung.Infrastructure;
+using QuanLyVanPhongCongChung.Persistence.Context;
 using QuanLyVanPhongCongChung.Persistence;
+using QuanLyVanPhongCongChung.Persistence.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,9 +31,9 @@ builder.Services.AddControllers()
     });
 
 var jwtSection = builder.Configuration.GetSection("Jwt");
-var issuer = jwtSection["Issuer"] ?? "QuanLyVanPhongCongChung";
-var audience = jwtSection["Audience"] ?? "QuanLyVanPhongCongChung.Client";
-var signingKey = jwtSection["SigningKey"] ?? "QuanLyVanPhongCongChung-Dev-Only-Key-Change-Me-2026";
+var issuer = jwtSection["Issuer"]!;
+var audience = jwtSection["Audience"]!;
+var signingKey = jwtSection["SigningKey"]!;
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -82,6 +85,18 @@ builder.Services.AddSwaggerGen(options =>
         Title = "QuanLyVanPhongCongChung API",
         Version = "v1"
     });
+
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Nhập JWT theo dạng: Bearer {token}",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    };
+
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, jwtSecurityScheme);
 });
 
 var app = builder.Build();
@@ -104,4 +119,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+    await DatabaseSeeder.SeedAsync(dbContext);
+}
+
+await app.RunAsync();

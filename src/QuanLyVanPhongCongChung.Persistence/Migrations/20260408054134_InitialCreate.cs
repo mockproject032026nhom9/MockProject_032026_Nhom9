@@ -11,8 +11,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
             migrationBuilder.CreateTable(
-                name: "certificate_authorities",
+                name: "CertificateAuthorities",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -21,11 +25,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_certificate_authorities", x => x.id);
+                    table.PrimaryKey("PK_CertificateAuthorities", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "events",
+                name: "Events",
+                schema: "dbo",
                 columns: table => new
                 {
                     event_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -33,11 +38,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_events", x => x.event_id);
+                    table.PrimaryKey("PK_Events", x => x.event_id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "hsm_key_storages",
+                name: "HsmKeyStorages",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -49,11 +55,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_hsm_key_storages", x => x.id);
+                    table.PrimaryKey("PK_HsmKeyStorages", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "languages",
+                name: "Languages",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -62,11 +69,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_languages", x => x.id);
+                    table.PrimaryKey("PK_Languages", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "organizations",
+                name: "Organizations",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -79,11 +87,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_organizations", x => x.id);
+                    table.PrimaryKey("PK_Organizations", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "roles",
+                name: "Roles",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -91,11 +100,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_roles", x => x.id);
+                    table.PrimaryKey("PK_Roles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "states",
+                name: "States",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -104,34 +114,12 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_states", x => x.id);
+                    table.PrimaryKey("PK_States", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "service_requests",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    organization_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    created_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    last_modified_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    last_modified_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_service_requests", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_service_requests_organizations_organization_id",
-                        column: x => x.organization_id,
-                        principalTable: "organizations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users",
+                name: "Users",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -150,99 +138,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.id);
+                    table.PrimaryKey("PK_Users", x => x.id);
                     table.ForeignKey(
-                        name: "FK_users_roles_id_role",
+                        name: "FK_Users_Roles_id_role",
                         column: x => x.id_role,
-                        principalTable: "roles",
+                        principalSchema: "dbo",
+                        principalTable: "Roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "deliveries",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    method = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_deliveries", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_deliveries_service_requests_request_id",
-                        column: x => x.request_id,
-                        principalTable: "service_requests",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "documents",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_documents", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_documents_service_requests_request_id",
-                        column: x => x.request_id,
-                        principalTable: "service_requests",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "payments",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    gateway = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    transaction = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_payments", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_payments_service_requests_request_id",
-                        column: x => x.request_id,
-                        principalTable: "service_requests",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "verifications",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    result = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    method = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_verifications", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_verifications_service_requests_request_id",
-                        column: x => x.request_id,
-                        principalTable: "service_requests",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "audit_logs",
+                name: "AuditLogs",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -255,17 +163,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_audit_logs", x => x.id);
+                    table.PrimaryKey("PK_AuditLogs", x => x.id);
                     table.ForeignKey(
-                        name: "FK_audit_logs_users_user_id",
+                        name: "FK_AuditLogs_Users_user_id",
                         column: x => x.user_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
-                name: "devices",
+                name: "Devices",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -277,17 +187,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_devices", x => x.id);
+                    table.PrimaryKey("PK_Devices", x => x.id);
                     table.ForeignKey(
-                        name: "FK_devices_users_user_id",
+                        name: "FK_Devices_Users_user_id",
                         column: x => x.user_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "export_histories",
+                name: "ExportHistories",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -300,17 +212,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_export_histories", x => x.id);
+                    table.PrimaryKey("PK_ExportHistories", x => x.id);
                     table.ForeignKey(
-                        name: "FK_export_histories_users_requested_by",
+                        name: "FK_ExportHistories_Users_requested_by",
                         column: x => x.requested_by,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "jobs",
+                name: "Jobs",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -329,17 +243,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_jobs", x => x.id);
+                    table.PrimaryKey("PK_Jobs", x => x.id);
                     table.ForeignKey(
-                        name: "FK_jobs_users_client_id",
+                        name: "FK_Jobs_Users_client_id",
                         column: x => x.client_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notaries",
+                name: "Notaries",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -362,17 +278,52 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notaries", x => x.id);
+                    table.PrimaryKey("PK_Notaries", x => x.id);
                     table.ForeignKey(
-                        name: "FK_notaries_users_user_id",
+                        name: "FK_Notaries_Users_user_id",
                         column: x => x.user_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "certificates",
+                name: "ServiceRequests",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    customer_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    organization_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    created_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    last_modified_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    last_modified_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceRequests", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ServiceRequests_Organizations_organization_id",
+                        column: x => x.organization_id,
+                        principalSchema: "dbo",
+                        principalTable: "Organizations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ServiceRequests_Users_customer_id",
+                        column: x => x.customer_id,
+                        principalSchema: "dbo",
+                        principalTable: "Users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Certificates",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -395,41 +346,46 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_certificates", x => x.id);
+                    table.PrimaryKey("PK_Certificates", x => x.id);
                     table.ForeignKey(
-                        name: "FK_certificates_certificate_authorities_ca_id",
+                        name: "FK_Certificates_CertificateAuthorities_ca_id",
                         column: x => x.ca_id,
-                        principalTable: "certificate_authorities",
+                        principalSchema: "dbo",
+                        principalTable: "CertificateAuthorities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_certificates_certificates_replace_cert_id",
+                        name: "FK_Certificates_Certificates_replace_cert_id",
                         column: x => x.replace_cert_id,
-                        principalTable: "certificates",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_certificates_devices_device_id",
+                        name: "FK_Certificates_Devices_device_id",
                         column: x => x.device_id,
-                        principalTable: "devices",
+                        principalSchema: "dbo",
+                        principalTable: "Devices",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_certificates_hsm_key_storages_hsm_key_id",
+                        name: "FK_Certificates_HsmKeyStorages_hsm_key_id",
                         column: x => x.hsm_key_id,
-                        principalTable: "hsm_key_storages",
+                        principalSchema: "dbo",
+                        principalTable: "HsmKeyStorages",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_certificates_users_owner_user_id",
+                        name: "FK_Certificates_Users_owner_user_id",
                         column: x => x.owner_user_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "job_status_logs",
+                name: "JobStatusLogs",
+                schema: "dbo",
                 columns: table => new
                 {
                     job_status_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -442,48 +398,53 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_job_status_logs", x => x.job_status_id);
+                    table.PrimaryKey("PK_JobStatusLogs", x => x.job_status_id);
                     table.ForeignKey(
-                        name: "FK_job_status_logs_jobs_job_id",
+                        name: "FK_JobStatusLogs_Jobs_job_id",
                         column: x => x.job_id,
-                        principalTable: "jobs",
+                        principalSchema: "dbo",
+                        principalTable: "Jobs",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notifications",
+                name: "Notifications",
+                schema: "dbo",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notification_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     event_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     job_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     sms = table.Column<bool>(type: "bit", nullable: false),
                     email = table.Column<bool>(type: "bit", nullable: false),
                     app = table.Column<bool>(type: "bit", nullable: false),
                     delay = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    timestamp = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    time_stamp = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notifications", x => x.id);
+                    table.PrimaryKey("PK_Notifications", x => x.notification_id);
                     table.ForeignKey(
-                        name: "FK_notifications_events_event_id",
+                        name: "FK_Notifications_Events_event_id",
                         column: x => x.event_id,
-                        principalTable: "events",
+                        principalSchema: "dbo",
+                        principalTable: "Events",
                         principalColumn: "event_id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_notifications_jobs_job_id",
+                        name: "FK_Notifications_Jobs_job_id",
                         column: x => x.job_id,
-                        principalTable: "jobs",
+                        principalSchema: "dbo",
+                        principalTable: "Jobs",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "job_assignments",
+                name: "JobAssignments",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -495,23 +456,26 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_job_assignments", x => x.id);
+                    table.PrimaryKey("PK_JobAssignments", x => x.id);
                     table.ForeignKey(
-                        name: "FK_job_assignments_jobs_job_id",
+                        name: "FK_JobAssignments_Jobs_job_id",
                         column: x => x.job_id,
-                        principalTable: "jobs",
+                        principalSchema: "dbo",
+                        principalTable: "Jobs",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_job_assignments_notaries_notary_id",
+                        name: "FK_JobAssignments_Notaries_notary_id",
                         column: x => x.notary_id,
-                        principalTable: "notaries",
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "journal_entries",
+                name: "JournalEntries",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -525,17 +489,322 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_journal_entries", x => x.id);
+                    table.PrimaryKey("PK_JournalEntries", x => x.id);
                     table.ForeignKey(
-                        name: "FK_journal_entries_notaries_notary_id",
+                        name: "FK_JournalEntries_Notaries_notary_id",
                         column: x => x.notary_id,
-                        principalTable: "notaries",
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notarial_acts",
+                name: "NotaryAuditLogs",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    table_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    record_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    action = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    old_value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    new_value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    changed_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryAuditLogs", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryAuditLogs_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryAvailabilities",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    working_days_per_week = table.Column<int>(type: "int", nullable: false),
+                    start_time = table.Column<TimeOnly>(type: "time", nullable: false),
+                    end_time = table.Column<TimeOnly>(type: "time", nullable: false),
+                    fixed_day_off = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryAvailabilities", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryAvailabilities_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryBonds",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    provider_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    bond_amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    effective_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryBonds", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryBonds_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryCapabilities",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    mobile = table.Column<bool>(type: "bit", nullable: false),
+                    ron = table.Column<bool>(type: "bit", nullable: false),
+                    loan_signing = table.Column<bool>(type: "bit", nullable: false),
+                    apostille_related_support = table.Column<bool>(type: "bit", nullable: false),
+                    max_distance = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryCapabilities", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryCapabilities_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryCommissions",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    commission_state = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    commission_number = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    issue_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    is_renewal_applied = table.Column<bool>(type: "bit", nullable: false),
+                    expected_renewal_date = table.Column<DateOnly>(type: "date", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryCommissions", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryCommissions_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryDocuments",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    doc_category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    file_name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    upload_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    verified_status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    version = table.Column<int>(type: "int", nullable: false),
+                    is_current_version = table.Column<bool>(type: "bit", nullable: false),
+                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryDocuments", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryDocuments_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryIncidents",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    incident_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    severity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    resolved_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryIncidents", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryIncidents_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryInsurances",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    policy_number = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    provider_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    coverage_amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    effective_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryInsurances", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryInsurances_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryServiceAreas",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    state_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    county_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryServiceAreas", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryServiceAreas_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NotaryServiceAreas_States_state_id",
+                        column: x => x.state_id,
+                        principalSchema: "dbo",
+                        principalTable: "States",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotaryStatusHistory",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    effective_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    created_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotaryStatusHistory", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NotaryStatusHistory_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deliveries",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    method = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deliveries", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Deliveries_ServiceRequests_request_id",
+                        column: x => x.request_id,
+                        principalSchema: "dbo",
+                        principalTable: "ServiceRequests",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    version = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Documents_ServiceRequests_request_id",
+                        column: x => x.request_id,
+                        principalSchema: "dbo",
+                        principalTable: "ServiceRequests",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotarialActs",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -551,266 +820,72 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notarial_acts", x => x.id);
+                    table.PrimaryKey("PK_NotarialActs", x => x.id);
                     table.ForeignKey(
-                        name: "FK_notarial_acts_notaries_notary_id",
+                        name: "FK_NotarialActs_Notaries_notary_id",
                         column: x => x.notary_id,
-                        principalTable: "notaries",
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_notarial_acts_service_requests_request_id",
+                        name: "FK_NotarialActs_ServiceRequests_request_id",
                         column: x => x.request_id,
-                        principalTable: "service_requests",
+                        principalSchema: "dbo",
+                        principalTable: "ServiceRequests",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notary_audit_logs",
+                name: "Payments",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    table_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    record_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    action = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    old_value = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    new_value = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    changed_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_audit_logs", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_audit_logs_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_availabilities",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    working_days_per_week = table.Column<int>(type: "int", nullable: false),
-                    start_time = table.Column<TimeOnly>(type: "time", nullable: false),
-                    end_time = table.Column<TimeOnly>(type: "time", nullable: false),
-                    fixed_day_off = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_availabilities", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_availabilities_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_bonds",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    provider_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    bond_amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    effective_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_bonds", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_bonds_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_capabilities",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    mobile = table.Column<bool>(type: "bit", nullable: false),
-                    ron = table.Column<bool>(type: "bit", nullable: false),
-                    loan_signing = table.Column<bool>(type: "bit", nullable: false),
-                    apostille_related_support = table.Column<bool>(type: "bit", nullable: false),
-                    max_distance = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_capabilities", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_capabilities_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_commissions",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    commission_state_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    commission_number = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    issue_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    is_renewal_applied = table.Column<bool>(type: "bit", nullable: false),
-                    expected_renewal_date = table.Column<DateOnly>(type: "date", nullable: true)
+                    gateway = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    transaction = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notary_commissions", x => x.id);
+                    table.PrimaryKey("PK_Payments", x => x.id);
                     table.ForeignKey(
-                        name: "FK_notary_commissions_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
+                        name: "FK_Payments_ServiceRequests_request_id",
+                        column: x => x.request_id,
+                        principalSchema: "dbo",
+                        principalTable: "ServiceRequests",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_notary_commissions_states_commission_state_id",
-                        column: x => x.commission_state_id,
-                        principalTable: "states",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notary_documents",
+                name: "Verifications",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    doc_category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    file_name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    upload_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    verified_status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    is_current_version = table.Column<bool>(type: "bit", nullable: false),
-                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                    request_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    result = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    method = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notary_documents", x => x.id);
+                    table.PrimaryKey("PK_Verifications", x => x.id);
                     table.ForeignKey(
-                        name: "FK_notary_documents_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
+                        name: "FK_Verifications_ServiceRequests_request_id",
+                        column: x => x.request_id,
+                        principalSchema: "dbo",
+                        principalTable: "ServiceRequests",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "notary_incidents",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    incident_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    severity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    resolved_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_incidents", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_incidents_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_insurances",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    policy_number = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    provider_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    coverage_amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    expiration_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    file_url = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_insurances", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_insurances_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_service_areas",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    state_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    county_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_service_areas", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_service_areas_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_notary_service_areas_states_state_id",
-                        column: x => x.state_id,
-                        principalTable: "states",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "notary_status_history",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    effective_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    created_by = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_notary_status_history", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_notary_status_history_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "digital_signatures",
+                name: "DigitalSignatures",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -825,29 +900,33 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_digital_signatures", x => x.id);
+                    table.PrimaryKey("PK_DigitalSignatures", x => x.id);
                     table.ForeignKey(
-                        name: "FK_digital_signatures_certificates_certificate_id",
+                        name: "FK_DigitalSignatures_Certificates_certificate_id",
                         column: x => x.certificate_id,
-                        principalTable: "certificates",
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_digital_signatures_devices_device_id",
+                        name: "FK_DigitalSignatures_Devices_device_id",
                         column: x => x.device_id,
-                        principalTable: "devices",
+                        principalSchema: "dbo",
+                        principalTable: "Devices",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_digital_signatures_users_user_id",
+                        name: "FK_DigitalSignatures_Users_user_id",
                         column: x => x.user_id,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "fee_breakdowns",
+                name: "FeeBreakdowns",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -863,17 +942,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_fee_breakdowns", x => x.id);
+                    table.PrimaryKey("PK_FeeBreakdowns", x => x.id);
                     table.ForeignKey(
-                        name: "FK_fee_breakdowns_journal_entries_journal_entry_id",
+                        name: "FK_FeeBreakdowns_JournalEntries_journal_entry_id",
                         column: x => x.journal_entry_id,
-                        principalTable: "journal_entries",
+                        principalSchema: "dbo",
+                        principalTable: "JournalEntries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "signers",
+                name: "Signers",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -882,90 +963,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_signers", x => x.id);
+                    table.PrimaryKey("PK_Signers", x => x.id);
                     table.ForeignKey(
-                        name: "FK_signers_journal_entries_journal_entry_id",
+                        name: "FK_Signers_JournalEntries_journal_entry_id",
                         column: x => x.journal_entry_id,
-                        principalTable: "journal_entries",
+                        principalSchema: "dbo",
+                        principalTable: "JournalEntries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "act_log_entries",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    timestamp = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_act_log_entries", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_act_log_entries_notarial_acts_act_id",
-                        column: x => x.act_id,
-                        principalTable: "notarial_acts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_act_log_entries_notaries_notary_id",
-                        column: x => x.notary_id,
-                        principalTable: "notaries",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "act_signatures",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    order_index = table.Column<int>(type: "int", nullable: false),
-                    signature_data = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_act_signatures", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_act_signatures_notarial_acts_act_id",
-                        column: x => x.act_id,
-                        principalTable: "notarial_acts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_act_signatures_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "compliance_reviews",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    result = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_compliance_reviews", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_compliance_reviews_notarial_acts_act_id",
-                        column: x => x.act_id,
-                        principalTable: "notarial_acts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ron_technologies",
+                name: "RonTechnologies",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -976,17 +986,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ron_technologies", x => x.id);
+                    table.PrimaryKey("PK_RonTechnologies", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ron_technologies_notary_capabilities_capability_id",
+                        name: "FK_RonTechnologies_NotaryCapabilities_capability_id",
                         column: x => x.capability_id,
-                        principalTable: "notary_capabilities",
+                        principalSchema: "dbo",
+                        principalTable: "NotaryCapabilities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "authority_scopes",
+                name: "AuthorityScopes",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -995,17 +1007,19 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_authority_scopes", x => x.id);
+                    table.PrimaryKey("PK_AuthorityScopes", x => x.id);
                     table.ForeignKey(
-                        name: "FK_authority_scopes_notary_commissions_commission_id",
+                        name: "FK_AuthorityScopes_NotaryCommissions_commission_id",
                         column: x => x.commission_id,
-                        principalTable: "notary_commissions",
+                        principalSchema: "dbo",
+                        principalTable: "NotaryCommissions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "seals",
+                name: "Seals",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1025,23 +1039,106 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_seals", x => x.id);
+                    table.PrimaryKey("PK_Seals", x => x.id);
                     table.ForeignKey(
-                        name: "FK_seals_notary_commissions_commission_id",
+                        name: "FK_Seals_NotaryCommissions_commission_id",
                         column: x => x.commission_id,
-                        principalTable: "notary_commissions",
+                        principalSchema: "dbo",
+                        principalTable: "NotaryCommissions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_seals_seals_replace_seal_id",
+                        name: "FK_Seals_Seals_replace_seal_id",
                         column: x => x.replace_seal_id,
-                        principalTable: "seals",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "biometric_data",
+                name: "ActLogEntries",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    notary_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    timestamp = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActLogEntries", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ActLogEntries_NotarialActs_act_id",
+                        column: x => x.act_id,
+                        principalSchema: "dbo",
+                        principalTable: "NotarialActs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActLogEntries_Notaries_notary_id",
+                        column: x => x.notary_id,
+                        principalSchema: "dbo",
+                        principalTable: "Notaries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActSignatures",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    order_index = table.Column<int>(type: "int", nullable: false),
+                    signature_data = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActSignatures", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ActSignatures_NotarialActs_act_id",
+                        column: x => x.act_id,
+                        principalSchema: "dbo",
+                        principalTable: "NotarialActs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActSignatures_Users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "dbo",
+                        principalTable: "Users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ComplianceReviews",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    act_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    result = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComplianceReviews", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ComplianceReviews_NotarialActs_act_id",
+                        column: x => x.act_id,
+                        principalSchema: "dbo",
+                        principalTable: "NotarialActs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BiometricData",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1050,17 +1147,89 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_biometric_data", x => x.id);
+                    table.PrimaryKey("PK_BiometricData", x => x.id);
                     table.ForeignKey(
-                        name: "FK_biometric_data_signers_signer_id",
+                        name: "FK_BiometricData_Signers_signer_id",
                         column: x => x.signer_id,
-                        principalTable: "signers",
+                        principalSchema: "dbo",
+                        principalTable: "Signers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "revocations",
+                name: "Incidents",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    reported_by = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    reported_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    seal_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    certificate_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Incidents", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Incidents_Certificates_certificate_id",
+                        column: x => x.certificate_id,
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Incidents_Seals_seal_id",
+                        column: x => x.seal_id,
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Incidents_Users_reported_by",
+                        column: x => x.reported_by,
+                        principalSchema: "dbo",
+                        principalTable: "Users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SealUsageLogs",
+                schema: "dbo",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    seal_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    used_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    page_number = table.Column<int>(type: "int", nullable: true),
+                    is_anomaly = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SealUsageLogs", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_SealUsageLogs_Seals_seal_id",
+                        column: x => x.seal_id,
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SealUsageLogs_Users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "dbo",
+                        principalTable: "Users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Revocations",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1073,63 +1242,40 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_revocations", x => x.id);
+                    table.PrimaryKey("PK_Revocations", x => x.id);
                     table.ForeignKey(
-                        name: "FK_revocations_certificates_certificate_id",
+                        name: "FK_Revocations_Certificates_certificate_id",
                         column: x => x.certificate_id,
-                        principalTable: "certificates",
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_revocations_notary_incidents_incident_id",
+                        name: "FK_Revocations_Incidents_incident_id",
                         column: x => x.incident_id,
-                        principalTable: "notary_incidents",
+                        principalSchema: "dbo",
+                        principalTable: "Incidents",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_revocations_seals_seal_id",
+                        name: "FK_Revocations_Seals_seal_id",
                         column: x => x.seal_id,
-                        principalTable: "seals",
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
                         principalColumn: "id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_revocations_users_performed_by",
+                        name: "FK_Revocations_Users_performed_by",
                         column: x => x.performed_by,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "seal_usage_logs",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    seal_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    used_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    page_number = table.Column<int>(type: "int", nullable: true),
-                    is_anomaly = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_seal_usage_logs", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_seal_usage_logs_seals_seal_id",
-                        column: x => x.seal_id,
-                        principalTable: "seals",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_seal_usage_logs_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "replacements",
+                name: "Replacements",
+                schema: "dbo",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1143,460 +1289,572 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_replacements", x => x.id);
+                    table.PrimaryKey("PK_Replacements", x => x.id);
                     table.ForeignKey(
-                        name: "FK_replacements_certificates_new_certificate_id",
+                        name: "FK_Replacements_Certificates_new_certificate_id",
                         column: x => x.new_certificate_id,
-                        principalTable: "certificates",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_replacements_certificates_old_certificate_id",
+                        name: "FK_Replacements_Certificates_old_certificate_id",
                         column: x => x.old_certificate_id,
-                        principalTable: "certificates",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Certificates",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_replacements_revocations_revocation_id",
+                        name: "FK_Replacements_Revocations_revocation_id",
                         column: x => x.revocation_id,
-                        principalTable: "revocations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Revocations",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_replacements_seals_new_seal_id",
+                        name: "FK_Replacements_Seals_new_seal_id",
                         column: x => x.new_seal_id,
-                        principalTable: "seals",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_replacements_seals_old_seal_id",
+                        name: "FK_Replacements_Seals_old_seal_id",
                         column: x => x.old_seal_id,
-                        principalTable: "seals",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalSchema: "dbo",
+                        principalTable: "Seals",
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_replacements_users_performed_by",
+                        name: "FK_Replacements_Users_performed_by",
                         column: x => x.performed_by,
-                        principalTable: "users",
+                        principalSchema: "dbo",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_act_log_entries_act_id",
-                table: "act_log_entries",
+                name: "IX_ActLogEntries_act_id",
+                schema: "dbo",
+                table: "ActLogEntries",
                 column: "act_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_act_log_entries_notary_id",
-                table: "act_log_entries",
+                name: "IX_ActLogEntries_notary_id",
+                schema: "dbo",
+                table: "ActLogEntries",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_act_signatures_act_id",
-                table: "act_signatures",
+                name: "IX_ActSignatures_act_id",
+                schema: "dbo",
+                table: "ActSignatures",
                 column: "act_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_act_signatures_user_id",
-                table: "act_signatures",
+                name: "IX_ActSignatures_user_id",
+                schema: "dbo",
+                table: "ActSignatures",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_audit_logs_entity_type_entity_id",
-                table: "audit_logs",
+                name: "IX_AuditLogs_entity_type_entity_id",
+                schema: "dbo",
+                table: "AuditLogs",
                 columns: new[] { "entity_type", "entity_id" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_audit_logs_timestamp",
-                table: "audit_logs",
+                name: "IX_AuditLogs_timestamp",
+                schema: "dbo",
+                table: "AuditLogs",
                 column: "timestamp");
 
             migrationBuilder.CreateIndex(
-                name: "IX_audit_logs_user_id",
-                table: "audit_logs",
+                name: "IX_AuditLogs_user_id",
+                schema: "dbo",
+                table: "AuditLogs",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_authority_scopes_commission_id",
-                table: "authority_scopes",
+                name: "IX_AuthorityScopes_commission_id",
+                schema: "dbo",
+                table: "AuthorityScopes",
                 column: "commission_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_biometric_data_signer_id",
-                table: "biometric_data",
+                name: "IX_BiometricData_signer_id",
+                schema: "dbo",
+                table: "BiometricData",
                 column: "signer_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_ca_id",
-                table: "certificates",
+                name: "IX_Certificates_ca_id",
+                schema: "dbo",
+                table: "Certificates",
                 column: "ca_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_device_id",
-                table: "certificates",
+                name: "IX_Certificates_device_id",
+                schema: "dbo",
+                table: "Certificates",
                 column: "device_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_hsm_key_id",
-                table: "certificates",
+                name: "IX_Certificates_hsm_key_id",
+                schema: "dbo",
+                table: "Certificates",
                 column: "hsm_key_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_owner_user_id",
-                table: "certificates",
+                name: "IX_Certificates_owner_user_id",
+                schema: "dbo",
+                table: "Certificates",
                 column: "owner_user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_replace_cert_id",
-                table: "certificates",
+                name: "IX_Certificates_replace_cert_id",
+                schema: "dbo",
+                table: "Certificates",
                 column: "replace_cert_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_certificates_status",
-                table: "certificates",
+                name: "IX_Certificates_status",
+                schema: "dbo",
+                table: "Certificates",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_compliance_reviews_act_id",
-                table: "compliance_reviews",
+                name: "IX_ComplianceReviews_act_id",
+                schema: "dbo",
+                table: "ComplianceReviews",
                 column: "act_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_deliveries_request_id",
-                table: "deliveries",
+                name: "IX_Deliveries_request_id",
+                schema: "dbo",
+                table: "Deliveries",
                 column: "request_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_devices_user_id",
-                table: "devices",
+                name: "IX_Devices_user_id",
+                schema: "dbo",
+                table: "Devices",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_digital_signatures_certificate_id",
-                table: "digital_signatures",
+                name: "IX_DigitalSignatures_certificate_id",
+                schema: "dbo",
+                table: "DigitalSignatures",
                 column: "certificate_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_digital_signatures_device_id",
-                table: "digital_signatures",
+                name: "IX_DigitalSignatures_device_id",
+                schema: "dbo",
+                table: "DigitalSignatures",
                 column: "device_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_digital_signatures_user_id",
-                table: "digital_signatures",
+                name: "IX_DigitalSignatures_user_id",
+                schema: "dbo",
+                table: "DigitalSignatures",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_documents_request_id",
-                table: "documents",
+                name: "IX_Documents_request_id",
+                schema: "dbo",
+                table: "Documents",
                 column: "request_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_export_histories_requested_by",
-                table: "export_histories",
+                name: "IX_ExportHistories_requested_by",
+                schema: "dbo",
+                table: "ExportHistories",
                 column: "requested_by");
 
             migrationBuilder.CreateIndex(
-                name: "IX_fee_breakdowns_journal_entry_id",
-                table: "fee_breakdowns",
+                name: "IX_FeeBreakdowns_journal_entry_id",
+                schema: "dbo",
+                table: "FeeBreakdowns",
                 column: "journal_entry_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_job_assignments_job_id",
-                table: "job_assignments",
+                name: "IX_Incidents_certificate_id",
+                schema: "dbo",
+                table: "Incidents",
+                column: "certificate_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Incidents_reported_at",
+                schema: "dbo",
+                table: "Incidents",
+                column: "reported_at");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Incidents_reported_by",
+                schema: "dbo",
+                table: "Incidents",
+                column: "reported_by");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Incidents_seal_id",
+                schema: "dbo",
+                table: "Incidents",
+                column: "seal_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobAssignments_job_id",
+                schema: "dbo",
+                table: "JobAssignments",
                 column: "job_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_job_assignments_notary_id_status",
-                table: "job_assignments",
+                name: "IX_JobAssignments_notary_id_status",
+                schema: "dbo",
+                table: "JobAssignments",
                 columns: new[] { "notary_id", "status" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_job_status_logs_job_id",
-                table: "job_status_logs",
-                column: "job_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_jobs_client_id",
-                table: "jobs",
+                name: "IX_Jobs_client_id",
+                schema: "dbo",
+                table: "Jobs",
                 column: "client_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_jobs_status",
-                table: "jobs",
+                name: "IX_Jobs_status",
+                schema: "dbo",
+                table: "Jobs",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_journal_entries_notary_id",
-                table: "journal_entries",
+                name: "IX_JobStatusLogs_job_id",
+                schema: "dbo",
+                table: "JobStatusLogs",
+                column: "job_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JournalEntries_notary_id",
+                schema: "dbo",
+                table: "JournalEntries",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_journal_entries_status",
-                table: "journal_entries",
+                name: "IX_JournalEntries_status",
+                schema: "dbo",
+                table: "JournalEntries",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_languages_lang_code",
-                table: "languages",
+                name: "IX_Languages_lang_code",
+                schema: "dbo",
+                table: "Languages",
                 column: "lang_code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_notarial_acts_jurisdiction_id",
-                table: "notarial_acts",
+                name: "IX_NotarialActs_jurisdiction_id",
+                schema: "dbo",
+                table: "NotarialActs",
                 column: "jurisdiction_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notarial_acts_notary_id",
-                table: "notarial_acts",
+                name: "IX_NotarialActs_notary_id",
+                schema: "dbo",
+                table: "NotarialActs",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notarial_acts_request_id",
-                table: "notarial_acts",
+                name: "IX_NotarialActs_request_id",
+                schema: "dbo",
+                table: "NotarialActs",
                 column: "request_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notarial_acts_status",
-                table: "notarial_acts",
+                name: "IX_NotarialActs_status",
+                schema: "dbo",
+                table: "NotarialActs",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notaries_email",
-                table: "notaries",
+                name: "IX_Notaries_email",
+                schema: "dbo",
+                table: "Notaries",
                 column: "email");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notaries_ssn",
-                table: "notaries",
+                name: "IX_Notaries_ssn",
+                schema: "dbo",
+                table: "Notaries",
                 column: "ssn",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_notaries_status",
-                table: "notaries",
+                name: "IX_Notaries_status",
+                schema: "dbo",
+                table: "Notaries",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notaries_user_id",
-                table: "notaries",
+                name: "IX_Notaries_user_id",
+                schema: "dbo",
+                table: "Notaries",
                 column: "user_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_audit_logs_notary_id_created_at",
-                table: "notary_audit_logs",
+                name: "IX_NotaryAuditLogs_notary_id_created_at",
+                schema: "dbo",
+                table: "NotaryAuditLogs",
                 columns: new[] { "notary_id", "created_at" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_availabilities_notary_id",
-                table: "notary_availabilities",
+                name: "IX_NotaryAvailabilities_notary_id",
+                schema: "dbo",
+                table: "NotaryAvailabilities",
                 column: "notary_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_bonds_notary_id",
-                table: "notary_bonds",
+                name: "IX_NotaryBonds_notary_id",
+                schema: "dbo",
+                table: "NotaryBonds",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_capabilities_notary_id",
-                table: "notary_capabilities",
+                name: "IX_NotaryCapabilities_notary_id",
+                schema: "dbo",
+                table: "NotaryCapabilities",
                 column: "notary_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_commissions_commission_state_id",
-                table: "notary_commissions",
-                column: "commission_state_id");
+                name: "IX_NotaryCommissions_commission_state",
+                schema: "dbo",
+                table: "NotaryCommissions",
+                column: "commission_state");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_commissions_expiration_date",
-                table: "notary_commissions",
+                name: "IX_NotaryCommissions_expiration_date",
+                schema: "dbo",
+                table: "NotaryCommissions",
                 column: "expiration_date");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_commissions_notary_id_status",
-                table: "notary_commissions",
+                name: "IX_NotaryCommissions_notary_id_status",
+                schema: "dbo",
+                table: "NotaryCommissions",
                 columns: new[] { "notary_id", "status" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_documents_notary_id_doc_category",
-                table: "notary_documents",
+                name: "IX_NotaryDocuments_notary_id_doc_category",
+                schema: "dbo",
+                table: "NotaryDocuments",
                 columns: new[] { "notary_id", "doc_category" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_incidents_notary_id_status",
-                table: "notary_incidents",
+                name: "IX_NotaryIncidents_notary_id_status",
+                schema: "dbo",
+                table: "NotaryIncidents",
                 columns: new[] { "notary_id", "status" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_insurances_notary_id",
-                table: "notary_insurances",
+                name: "IX_NotaryInsurances_notary_id",
+                schema: "dbo",
+                table: "NotaryInsurances",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_service_areas_notary_id_state_id",
-                table: "notary_service_areas",
+                name: "IX_NotaryServiceAreas_notary_id_state_id",
+                schema: "dbo",
+                table: "NotaryServiceAreas",
                 columns: new[] { "notary_id", "state_id" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_service_areas_state_id",
-                table: "notary_service_areas",
+                name: "IX_NotaryServiceAreas_state_id",
+                schema: "dbo",
+                table: "NotaryServiceAreas",
                 column: "state_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notary_status_history_notary_id",
-                table: "notary_status_history",
+                name: "IX_NotaryStatusHistory_notary_id",
+                schema: "dbo",
+                table: "NotaryStatusHistory",
                 column: "notary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notifications_event_id",
-                table: "notifications",
+                name: "IX_Notifications_event_id",
+                schema: "dbo",
+                table: "Notifications",
                 column: "event_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notifications_job_id",
-                table: "notifications",
+                name: "IX_Notifications_job_id",
+                schema: "dbo",
+                table: "Notifications",
                 column: "job_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_payments_request_id",
-                table: "payments",
+                name: "IX_Payments_request_id",
+                schema: "dbo",
+                table: "Payments",
                 column: "request_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_new_certificate_id",
-                table: "replacements",
+                name: "IX_Replacements_new_certificate_id",
+                schema: "dbo",
+                table: "Replacements",
                 column: "new_certificate_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_new_seal_id",
-                table: "replacements",
+                name: "IX_Replacements_new_seal_id",
+                schema: "dbo",
+                table: "Replacements",
                 column: "new_seal_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_old_certificate_id",
-                table: "replacements",
+                name: "IX_Replacements_old_certificate_id",
+                schema: "dbo",
+                table: "Replacements",
                 column: "old_certificate_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_old_seal_id",
-                table: "replacements",
+                name: "IX_Replacements_old_seal_id",
+                schema: "dbo",
+                table: "Replacements",
                 column: "old_seal_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_performed_by",
-                table: "replacements",
+                name: "IX_Replacements_performed_by",
+                schema: "dbo",
+                table: "Replacements",
                 column: "performed_by");
 
             migrationBuilder.CreateIndex(
-                name: "IX_replacements_revocation_id",
-                table: "replacements",
+                name: "IX_Replacements_revocation_id",
+                schema: "dbo",
+                table: "Replacements",
                 column: "revocation_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_revocations_certificate_id",
-                table: "revocations",
+                name: "IX_Revocations_certificate_id",
+                schema: "dbo",
+                table: "Revocations",
                 column: "certificate_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_revocations_incident_id",
-                table: "revocations",
+                name: "IX_Revocations_incident_id",
+                schema: "dbo",
+                table: "Revocations",
                 column: "incident_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_revocations_performed_by",
-                table: "revocations",
+                name: "IX_Revocations_performed_by",
+                schema: "dbo",
+                table: "Revocations",
                 column: "performed_by");
 
             migrationBuilder.CreateIndex(
-                name: "IX_revocations_seal_id",
-                table: "revocations",
+                name: "IX_Revocations_seal_id",
+                schema: "dbo",
+                table: "Revocations",
                 column: "seal_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_roles_role_name",
-                table: "roles",
+                name: "IX_Roles_role_name",
+                schema: "dbo",
+                table: "Roles",
                 column: "role_name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ron_technologies_capability_id",
-                table: "ron_technologies",
+                name: "IX_RonTechnologies_capability_id",
+                schema: "dbo",
+                table: "RonTechnologies",
                 column: "capability_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_seal_usage_logs_seal_id",
-                table: "seal_usage_logs",
-                column: "seal_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_seal_usage_logs_user_id",
-                table: "seal_usage_logs",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_seals_commission_id",
-                table: "seals",
+                name: "IX_Seals_commission_id",
+                schema: "dbo",
+                table: "Seals",
                 column: "commission_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_seals_notarial_act_id",
-                table: "seals",
+                name: "IX_Seals_notarial_act_id",
+                schema: "dbo",
+                table: "Seals",
                 column: "notarial_act_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_seals_replace_seal_id",
-                table: "seals",
+                name: "IX_Seals_replace_seal_id",
+                schema: "dbo",
+                table: "Seals",
                 column: "replace_seal_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_seals_status",
-                table: "seals",
+                name: "IX_Seals_status",
+                schema: "dbo",
+                table: "Seals",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_service_requests_organization_id",
-                table: "service_requests",
+                name: "IX_SealUsageLogs_seal_id",
+                schema: "dbo",
+                table: "SealUsageLogs",
+                column: "seal_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SealUsageLogs_user_id",
+                schema: "dbo",
+                table: "SealUsageLogs",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceRequests_customer_id",
+                schema: "dbo",
+                table: "ServiceRequests",
+                column: "customer_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceRequests_organization_id",
+                schema: "dbo",
+                table: "ServiceRequests",
                 column: "organization_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_signers_journal_entry_id",
-                table: "signers",
+                name: "IX_Signers_journal_entry_id",
+                schema: "dbo",
+                table: "Signers",
                 column: "journal_entry_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_states_state_code",
-                table: "states",
+                name: "IX_States_state_code",
+                schema: "dbo",
+                table: "States",
                 column: "state_code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_email",
-                table: "users",
+                name: "IX_Users_email",
+                schema: "dbo",
+                table: "Users",
                 column: "email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_id_role",
-                table: "users",
+                name: "IX_Users_id_role",
+                schema: "dbo",
+                table: "Users",
                 column: "id_role");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_status",
-                table: "users",
+                name: "IX_Users_status",
+                schema: "dbo",
+                table: "Users",
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_verifications_request_id",
-                table: "verifications",
+                name: "IX_Verifications_request_id",
+                schema: "dbo",
+                table: "Verifications",
                 column: "request_id",
                 unique: true);
         }
@@ -1605,145 +1863,196 @@ namespace QuanLyVanPhongCongChung.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "act_log_entries");
+                name: "ActLogEntries",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "act_signatures");
+                name: "ActSignatures",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "audit_logs");
+                name: "AuditLogs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "authority_scopes");
+                name: "AuthorityScopes",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "biometric_data");
+                name: "BiometricData",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "compliance_reviews");
+                name: "ComplianceReviews",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "deliveries");
+                name: "Deliveries",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "digital_signatures");
+                name: "DigitalSignatures",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "documents");
+                name: "Documents",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "export_histories");
+                name: "ExportHistories",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "fee_breakdowns");
+                name: "FeeBreakdowns",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "job_assignments");
+                name: "JobAssignments",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "job_status_logs");
+                name: "JobStatusLogs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "languages");
+                name: "Languages",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_audit_logs");
+                name: "NotaryAuditLogs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_availabilities");
+                name: "NotaryAvailabilities",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_bonds");
+                name: "NotaryBonds",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_documents");
+                name: "NotaryDocuments",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_insurances");
+                name: "NotaryIncidents",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_service_areas");
+                name: "NotaryInsurances",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_status_history");
+                name: "NotaryServiceAreas",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notifications");
+                name: "NotaryStatusHistory",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "payments");
+                name: "Notifications",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "replacements");
+                name: "Payments",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "ron_technologies");
+                name: "Replacements",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "seal_usage_logs");
+                name: "RonTechnologies",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "verifications");
+                name: "SealUsageLogs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "signers");
+                name: "Verifications",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notarial_acts");
+                name: "Signers",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "events");
+                name: "NotarialActs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "jobs");
+                name: "States",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "revocations");
+                name: "Events",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_capabilities");
+                name: "Jobs",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "journal_entries");
+                name: "Revocations",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "service_requests");
+                name: "NotaryCapabilities",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "certificates");
+                name: "JournalEntries",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_incidents");
+                name: "ServiceRequests",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "seals");
+                name: "Incidents",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "organizations");
+                name: "Organizations",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "certificate_authorities");
+                name: "Certificates",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "devices");
+                name: "Seals",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "hsm_key_storages");
+                name: "CertificateAuthorities",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notary_commissions");
+                name: "Devices",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "notaries");
+                name: "HsmKeyStorages",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "states");
+                name: "NotaryCommissions",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "Notaries",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "Users",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Roles",
+                schema: "dbo");
         }
     }
 }

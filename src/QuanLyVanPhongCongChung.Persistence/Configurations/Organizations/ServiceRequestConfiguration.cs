@@ -8,15 +8,21 @@ public class ServiceRequestConfiguration : IEntityTypeConfiguration<ServiceReque
 {
     public void Configure(EntityTypeBuilder<ServiceRequest> builder)
     {
-        builder.ToTable("service_requests");
+        builder.ToTable("ServiceRequests");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id).HasColumnName("id");
+        builder.Property(s => s.CustomerId).HasColumnName("customer_id");
         builder.Property(s => s.OrganizationId).HasColumnName("organization_id");
         builder.Property(s => s.Status).HasColumnName("status");
         builder.Property(s => s.CreatedAt).HasColumnName("created_at");
         builder.Property(s => s.CreatedBy).HasColumnName("created_by").HasMaxLength(100);
         builder.Property(s => s.LastModifiedAt).HasColumnName("last_modified_at");
         builder.Property(s => s.LastModifiedBy).HasColumnName("last_modified_by").HasMaxLength(100);
+
+        builder.HasOne(s => s.Customer)
+            .WithMany()
+            .HasForeignKey(s => s.CustomerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(s => s.Organization)
             .WithMany(o => o.Requests)
@@ -44,6 +50,7 @@ public class ServiceRequestConfiguration : IEntityTypeConfiguration<ServiceReque
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(s => s.OrganizationId);
+        builder.HasIndex(s => s.CustomerId);
 
         builder.Navigation(s => s.Payments).UsePropertyAccessMode(PropertyAccessMode.Field);
         builder.Navigation(s => s.Documents).UsePropertyAccessMode(PropertyAccessMode.Field);
