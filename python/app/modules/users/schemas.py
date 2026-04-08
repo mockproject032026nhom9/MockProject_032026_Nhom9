@@ -19,7 +19,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6, max_length=100)
-    role_id: int = 3  # Default to Customer (3)
+    role_id: int | None = None  # Resolved dynamically in service layer if not provided
 
 class LoginSchema(BaseModel):
     """User login credentials."""

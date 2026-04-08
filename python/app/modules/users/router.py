@@ -8,6 +8,7 @@ from app.core.dependencies import RoleChecker, get_current_user
 from app.core.schemas import ApiResponse, Token
 from app.modules.users.models import User
 from app.modules.users.schemas import (
+    LoginSchema,
     UserCreate,
     UserOut,
     UserRole,
@@ -19,7 +20,7 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("/register", response_model=ApiResponse[UserOut], status_code=status.HTTP_201_CREATED)
 async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
-    """User self-registration."""
+    """User self-registration. Defaults to 'Customer' role."""
     user = await user_service.create(db, user_in)
     return ApiResponse(
         status_code=status.HTTP_201_CREATED,
@@ -30,8 +31,8 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
 from fastapi.security import OAuth2PasswordRequestForm
 
 @router.post("/login", response_model=Token)
-async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
-    """Authenticate and return a JWT access token."""
+async def login_form(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    """Authenticate via Form-Data (Standard OAuth2). Note: 'username' is the user's email."""
     user = await user_service.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -39,7 +40,17 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
             detail="Invalid email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+    return user_service.create_token(user)
+
+@router.post("/login/json", response_model=Token)
+async def login_json(credentials: LoginSchema, db: AsyncSession = Depends(get_db)):
+    """Authenticate via JSON. Preferred for most modern frontend applications."""
+    user = await user_service.authenticate(db, credentials.email, credentials.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password"
+        )
     return user_service.create_token(user)
 
 @router.get("/me", response_model=ApiResponse[UserOut])

@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.exceptions import AppException
 from app.core.schemas import Token
 from app.core.security import create_access_token, get_password_hash, verify_password
+from app.modules.roles.models import Role
 from app.modules.users.models import User
 from app.modules.users.schemas import UserCreate, UserUpdate
 
@@ -34,6 +35,16 @@ class UserService:
             
         user_data = user_in.model_dump()
         user_data["password_hash"] = get_password_hash(user_data.pop("password"))
+        
+        # Dynamic Role Resolution
+        if not user_data.get("role_id"):
+            role_result = await db.execute(select(Role).filter(Role.name == "Customer"))
+            customer_role = role_result.scalars().first()
+            if customer_role:
+                user_data["role_id"] = customer_role.id
+            else:
+                # Fallback or strict error
+                raise AppException("System role 'Customer' not found. Please contact support.", status_code=500)
         
         user = User(**user_data)
         db.add(user)

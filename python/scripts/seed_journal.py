@@ -22,6 +22,7 @@ from app.modules.journal_entries.models import (
     JournalFee,
     JournalSigner,
 )
+from app.core.security import get_password_hash
 from app.modules.roles.models import Role
 from app.modules.users.models import User
 from app.modules.references.models import VoidReason
@@ -45,7 +46,7 @@ async def seed_journal_data():
             
             user = User(
                 email="admin@notary.com",
-                password_hash="$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6L65JG6C3V6Xm8f6", # 'password'
+                password_hash=get_password_hash("password"), 
                 full_name="James Smith",
                 role_id=admin_role.id
             )
